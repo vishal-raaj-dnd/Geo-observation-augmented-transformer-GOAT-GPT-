@@ -243,10 +243,12 @@ export default function App() {
     };
     const stopLoading = () => { setIsToolLoading(false); setToolStepText(''); };
 
-    const streamUrl = `http://localhost:8000/api/chat/stream?query=${encodeURIComponent(textToSend)}&city=${encodeURIComponent(activeCity)}&state=${encodeURIComponent(activeState)}&month=${encodeURIComponent(dateTime.split(' ')[0] || 'August')}&year=${encodeURIComponent(dateTime.split(' ')[1] || '2026')}`;
+    const LOCAL_BACKEND = `http://localhost:8000/api/chat/stream?query=${encodeURIComponent(textToSend)}&city=${encodeURIComponent(activeCity)}&state=${encodeURIComponent(activeState)}&month=${encodeURIComponent(dateTime.split(' ')[0] || 'August')}&year=${encodeURIComponent(dateTime.split(' ')[1] || '2026')}`;
+    const HF_SPACE_URL = `https://dinesh-07-dev-goat-gpt-backend.hf.space/api/predict`;
 
+    // Try connecting to Hugging Face GPU Space or Local SSE Backend
     try {
-      const eventSource = new EventSource(streamUrl);
+      const eventSource = new EventSource(LOCAL_BACKEND);
 
       eventSource.onmessage = (event) => {
         try {
@@ -269,11 +271,28 @@ export default function App() {
 
       eventSource.onerror = () => {
         eventSource.close();
-        // Fallback to standalone simulation if backend offline
-        setToolStepText(`Running local GOAT GPT engine fallback...`);
-        runLocalSimulation();
+        setToolStepText(`Routing query to Hugging Face GPU (dinesh-07-dev/goat-gpt-backend)...`);
+        callHuggingFaceGPU();
       };
     } catch (err) {
+      callHuggingFaceGPU();
+    }
+
+    async function callHuggingFaceGPU() {
+      try {
+        const resp = await fetch(HF_SPACE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: [null, textToSend, "flood"] })
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          const resultText = data.data?.[1] || data.data?.[0] || "Hugging Face GPU Analysis Complete";
+          appendDelta(resultText);
+          stopLoading();
+          return;
+        }
+      } catch (err) {}
       runLocalSimulation();
     }
 
