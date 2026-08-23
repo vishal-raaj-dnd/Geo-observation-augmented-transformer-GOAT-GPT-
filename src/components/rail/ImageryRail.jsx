@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Layers, Droplets, BarChart3, Satellite, Plus, Loader2, Download, CloudSun } from 'lucide-react';
+import { X, Layers, Droplets, BarChart3, Satellite, Plus, Loader2, Download, CloudSun, Calendar, ShieldCheck } from 'lucide-react';
 import MetricCardGrid from '../metrics/MetricCardGrid';
 import LineChartCard from '../metrics/LineChartCard';
 import DonutChartCard from '../metrics/DonutChartCard';
@@ -7,6 +7,7 @@ import TimelineScrubber from '../metrics/TimelineScrubber';
 import ExportActions from '../metrics/ExportActions';
 
 function FrameCard({ frame, onOverlay }) {
+  const isAvailable = frame.url && frame.bbox;
   return (
     <div style={{
       backgroundColor: 'rgba(24, 24, 27, 0.9)',
@@ -15,48 +16,62 @@ function FrameCard({ frame, onOverlay }) {
       overflow: 'hidden',
       flexShrink: 0
     }}>
-      <div style={{ position: 'relative', height: 110, backgroundColor: '#09090b' }}>
+      <div style={{ position: 'relative', height: 125, backgroundColor: '#09090b' }}>
         {frame.url ? (
-          <img src={frame.url} alt={frame.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.95 }} />
+          <img src={frame.url} alt={frame.name || frame.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.95 }} />
         ) : (
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 6 }}>
             <Loader2 size={16} style={{ animation: 'spin 1s linear infinite', color: '#38bdf8' }} />
-            <span style={{ fontSize: 10, color: '#94a3b8' }}>Computing…</span>
+            <span style={{ fontSize: 10, color: '#94a3b8' }}>Fetching Satellite Scene…</span>
           </div>
         )}
-        <span style={{
-          position: 'absolute', top: 6, left: 6,
-          fontSize: 9, fontWeight: 700, color: '#e2e8f0',
-          backgroundColor: 'rgba(9, 9, 11, 0.85)', border: '1px solid #3f3f46',
-          borderRadius: 4, padding: '1px 6px'
+        <div style={{
+          position: 'absolute', top: 6, left: 6, display: 'flex', gap: 5
         }}>
-          {frame.sensor}
-        </span>
+          <span style={{
+            fontSize: 9, fontWeight: 700, color: '#e2e8f0',
+            backgroundColor: 'rgba(9, 9, 11, 0.88)', border: '1px solid #3f3f46',
+            borderRadius: 4, padding: '1px 6px'
+          }}>
+            {frame.sensor || 'Sentinel-2 L2A'}
+          </span>
+          {frame.cloud_cover && (
+            <span style={{
+              fontSize: 9, fontWeight: 700, color: '#38bdf8',
+              backgroundColor: 'rgba(9, 9, 11, 0.88)', border: '1px solid rgba(56, 189, 248, 0.3)',
+              borderRadius: 4, padding: '1px 6px'
+            }}>
+              ☁️ {frame.cloud_cover}
+            </span>
+          )}
+        </div>
       </div>
-      <div style={{ padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 7 }}>
-        <div style={{ fontSize: 10.5, fontWeight: 600, color: '#e2e8f0', lineHeight: 1.35 }}>
-          {frame.title}
+      <div style={{ padding: '9px 11px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#f4f4f5', lineHeight: 1.35, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Calendar size={12} style={{ color: '#38bdf8' }} />
+          {frame.name || frame.title || frame.date}
         </div>
         <button
           onClick={() => onOverlay(frame)}
-          disabled={!frame.url || !frame.bbox}
+          disabled={!isAvailable}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: 5,
-            fontSize: 10,
+            gap: 6,
+            fontSize: 10.5,
             fontWeight: 700,
-            color: frame.url && frame.bbox ? '#7dd3fc' : '#52525b',
-            backgroundColor: 'rgba(56, 189, 248, 0.08)',
-            border: '1px solid rgba(56, 189, 248, 0.35)',
+            color: isAvailable ? '#09090b' : '#52525b',
+            backgroundColor: isAvailable ? '#38bdf8' : '#27272a',
+            border: 'none',
             borderRadius: 6,
-            padding: '4px 8px',
-            cursor: frame.url && frame.bbox ? 'pointer' : 'not-allowed'
+            padding: '6px 10px',
+            cursor: isAvailable ? 'pointer' : 'not-allowed',
+            transition: 'all 150ms ease'
           }}
         >
-          <Plus size={11} />
-          Overlay on Map
+          <Plus size={12} />
+          Overlay Satellite Scene on Map
         </button>
       </div>
     </div>
@@ -75,23 +90,31 @@ export default function ImageryRail({
   stateName,
   dispatchMapCommand
 }) {
-  const ndwiFrame = imagery?.frames?.find(f => f.id.startsWith('ndwi') && f.url);
-  const ndwiStats = imagery?.ndwiStats;
-
   const handleOverlay = (frame) => {
     dispatchMapCommand('overlayImage', {
       id: frame.id,
       url: frame.url,
       bounds: frame.bbox,
-      title: frame.band === 'NDWI (Green-NIR)/(Green+NIR)' ? 'NDWI Water Mask' : frame.title.split('—')[0].trim()
+      title: frame.name || frame.title
     });
   };
 
+  // Combine real satellite frames from API deliverables + resolved imagery
+  const apiFrames = latestDeliverables?.frames || [];
+  const resolvedFrames = imagery?.frames || [];
+  const allFrames = apiFrames.length > 0 ? apiFrames : resolvedFrames;
+
+  const showNdwiTab = Boolean(
+    imagery?.ndwiStats ||
+    latestDeliverables?.metrics?.mean_ndwi_score ||
+    allFrames.some(f => f.id && f.id.includes('ndwi'))
+  );
+
   const tabs = [
     { id: 'frames', label: 'Frames', icon: <Layers size={12} /> },
-    { id: 'ndwi', label: 'NDWI', icon: <Droplets size={12} /> },
+    showNdwiTab && { id: 'ndwi', label: 'NDWI', icon: <Droplets size={12} /> },
     { id: 'charts', label: 'Charts', icon: <BarChart3 size={12} /> }
-  ];
+  ].filter(Boolean);
 
   return (
     <aside style={{
@@ -158,37 +181,55 @@ export default function ImageryRail({
       {/* Body */}
       <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
 
-        {!imagery && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '14px', color: '#94a3b8', fontSize: 12 }}>
-            <Loader2 size={14} style={{ animation: 'spin 1s linear infinite', color: '#38bdf8' }} />
-            Resolving satellite frames for {cityName}…
+        {/* SATELLITE FRAMES STREAM TAB */}
+        {tab === 'frames' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{
+              fontSize: 11,
+              fontWeight: 800,
+              color: '#38bdf8',
+              letterSpacing: '0.5px',
+              textTransform: 'uppercase',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: 4,
+              borderBottom: '1px solid #27272a'
+            }}>
+              <span>Satellite Imagery Stream ({cityName})</span>
+              <span style={{ fontSize: 9.5, color: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', padding: '1px 6px', borderRadius: 4 }}>
+                {allFrames.length} Passes
+              </span>
+            </div>
+
+            {allFrames.length === 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '16px', color: '#94a3b8', fontSize: 12 }}>
+                <Loader2 size={15} style={{ animation: 'spin 1s linear infinite', color: '#38bdf8' }} />
+                Fetching Sentinel-2 satellite passes for {cityName}...
+              </div>
+            ) : (
+              allFrames.map((frame, idx) => (
+                <FrameCard key={frame.id || idx} frame={frame} onOverlay={handleOverlay} />
+              ))
+            )}
+            <TimelineScrubber />
           </div>
         )}
 
-        {/* FRAMES TAB */}
-        {imagery && tab === 'frames' && (
-          <>
-            {(imagery.frames || []).filter(f => !f.pending).map(frame => (
-              <FrameCard key={frame.id} frame={frame} onOverlay={handleOverlay} />
-            ))}
-            <TimelineScrubber />
-          </>
-        )}
-
-        {/* NDWI TAB */}
+        {/* NDWI TAB (Conditioned on NDWI presence) */}
         {tab === 'ndwi' && (
           <>
-            {ndwiStats ? (
+            {imagery?.ndwiStats ? (
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
                 gap: 8
               }}>
                 {[
-                  { label: 'Water Coverage', value: `${ndwiStats.water_pct}%` },
-                  { label: 'Mean NDWI', value: `${ndwiStats.mean_ndwi > 0 ? '+' : ''}${ndwiStats.mean_ndwi}` },
-                  { label: 'Scene Date', value: ndwiStats.scene_date || '—' },
-                  { label: 'Cloud Cover', value: `${Math.round(ndwiStats.cloud_pct ?? 0)}%` }
+                  { label: 'Water Coverage', value: `${imagery.ndwiStats.water_pct}%` },
+                  { label: 'Mean NDWI', value: `${imagery.ndwiStats.mean_ndwi > 0 ? '+' : ''}${imagery.ndwiStats.mean_ndwi}` },
+                  { label: 'Scene Date', value: imagery.ndwiStats.scene_date || '—' },
+                  { label: 'Cloud Cover', value: `${Math.round(imagery.ndwiStats.cloud_pct ?? 0)}%` }
                 ].map(s => (
                   <div key={s.label} style={{
                     backgroundColor: 'rgba(24, 24, 27, 0.9)',
@@ -204,31 +245,7 @@ export default function ImageryRail({
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '14px', color: '#94a3b8', fontSize: 12 }}>
                 <CloudSun size={15} />
-                NDWI statistics pending — Sentinel-2 COG band math in progress…
-              </div>
-            )}
-
-            {ndwiFrame ? (
-              <>
-                <FrameCard frame={ndwiFrame} onOverlay={handleOverlay} />
-                <div style={{
-                  fontSize: 10.5,
-                  color: '#94a3b8',
-                  lineHeight: 1.55,
-                  padding: '9px 11px',
-                  backgroundColor: 'rgba(24, 24, 27, 0.7)',
-                  border: '1px dashed #3f3f46',
-                  borderRadius: 9
-                }}>
-                  McFeeters index = (Green − NIR) / (Green + NIR), computed pixel-wise on a real
-                  Sentinel-2 L2A scene. Blue pixels exceed the +0.12 open-water threshold;
-                  overlay it on the map to see inundation in geographic context.
-                </div>
-              </>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '14px', color: '#94a3b8', fontSize: 12 }}>
-                <Loader2 size={14} style={{ animation: 'spin 1s linear infinite', color: '#38bdf8' }} />
-                Waiting for NDWI frame…
+                NDWI spectral indices available when water analysis is active.
               </div>
             )}
           </>
@@ -251,7 +268,10 @@ export default function ImageryRail({
                   alignItems: 'center',
                   justifyContent: 'space-between'
                 }}>
-                  <span>🛡️ Ground-Truth Engine: {latestDeliverables.verification.truthfulness_score}</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <ShieldCheck size={13} />
+                    Ground-Truth Engine: {latestDeliverables.verification.truthfulness_score}
+                  </span>
                   <span style={{ color: '#38bdf8' }}>{latestDeliverables.verification.copernicus_ground_truth_match}</span>
                 </div>
               )}
@@ -302,7 +322,7 @@ export default function ImageryRail({
         gap: 6
       }}>
         <Download size={11} />
-        Sources: NASA GIBS · Sentinel-2 COGs · Esri World Imagery
+        Sources: Copernicus Sentinel-2 L2A · NASA GIBS · Esri World Imagery
       </div>
     </aside>
   );
