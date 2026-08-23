@@ -8,9 +8,10 @@ const YEARS = [2023, 2024, 2025, 2026, 2027];
 
 // Formatted Markdown Paragraph Renderer Helper
 function renderFormattedText(text) {
-  if (!text) return null;
+  if (text === null || text === undefined) return null;
+  const str = typeof text === 'string' ? text : (typeof text === 'object' ? JSON.stringify(text, null, 2) : String(text));
 
-  const lines = text.split('\n');
+  const lines = str.split('\n');
   return lines.map((line, idx) => {
     const trimmed = line.trim();
     if (!trimmed) return <div key={idx} style={{ height: 6 }} />;
