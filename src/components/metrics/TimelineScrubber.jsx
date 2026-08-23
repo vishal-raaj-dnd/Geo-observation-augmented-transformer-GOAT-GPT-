@@ -17,24 +17,32 @@ export default function TimelineScrubber({ frames = [], onDayChange }) {
         { label: "Peak Flood Pass (T-Post)", date: "Active Event", status: "Sentinel-2 L2A 10m", water_pct: "Inundation", ndwi: "Evaluated" }
       ];
 
-  const [activeDayIdx, setActiveDayIdx] = useState(3);
+  const [activeDayIdx, setActiveDayIdx] = useState(0);
+
+  const safeIdx = Math.min(activeDayIdx, Math.max(0, days.length - 1));
+  const currentDay = days[safeIdx] || {
+    label: "Scene Pass",
+    date: "Live",
+    status: "Sentinel-2 MSI",
+    water_pct: "—",
+    ndwi: "—"
+  };
 
   const handleSelectDay = (idx) => {
-    setActiveDayIdx(idx);
-    if (onDayChange) onDayChange(days[idx]);
+    const clamped = Math.max(0, Math.min(idx, days.length - 1));
+    setActiveDayIdx(clamped);
+    if (onDayChange && days[clamped]) onDayChange(days[clamped]);
   };
 
   const handlePrev = () => {
-    const nextIdx = activeDayIdx === 0 ? days.length - 1 : activeDayIdx - 1;
+    const nextIdx = safeIdx === 0 ? days.length - 1 : safeIdx - 1;
     handleSelectDay(nextIdx);
   };
 
   const handleNext = () => {
-    const nextIdx = activeDayIdx === days.length - 1 ? 0 : activeDayIdx + 1;
+    const nextIdx = safeIdx === days.length - 1 ? 0 : safeIdx + 1;
     handleSelectDay(nextIdx);
   };
-
-  const currentDay = days[activeDayIdx];
 
   return (
     <div style={{
@@ -101,9 +109,9 @@ export default function TimelineScrubber({ frames = [], onDayChange }) {
               fontWeight: 600,
               borderRadius: 6,
               border: '1px solid',
-              borderColor: activeDayIdx === idx ? '#3b82f6' : '#27272a',
-              backgroundColor: activeDayIdx === idx ? 'rgba(59, 130, 246, 0.2)' : 'rgba(9, 9, 11, 0.6)',
-              color: activeDayIdx === idx ? '#60a5fa' : '#a1a1aa',
+              borderColor: safeIdx === idx ? '#3b82f6' : '#27272a',
+              backgroundColor: safeIdx === idx ? 'rgba(59, 130, 246, 0.2)' : 'rgba(9, 9, 11, 0.6)',
+              color: safeIdx === idx ? '#60a5fa' : '#a1a1aa',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               textAlign: 'center'
