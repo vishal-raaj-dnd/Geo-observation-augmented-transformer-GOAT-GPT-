@@ -149,6 +149,9 @@ export default function AnnotatedGallery({ gallery, onAttachImage }) {
     setSelectedDateStr(dayObj.date);
   };
 
+  const [zoomScale, setZoomScale] = useState(1.0);
+  const [showFloodBox, setShowFloodBox] = useState(true);
+
   return (
     <div style={{
       backgroundColor: 'rgba(24, 24, 27, 0.9)',
@@ -170,13 +173,44 @@ export default function AnnotatedGallery({ gallery, onAttachImage }) {
               Multi-Spectral Satellite Raster Engine
             </div>
             <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
-              Capture Date: {selectedDateStr} | Sentinel-2 / Landsat Tile
+              Capture Date: {selectedDateStr} | Zoom: {zoomScale.toFixed(1)}x
             </div>
           </div>
         </div>
 
         {/* View Mode & Band Switcher Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          {/* Zoom Slider */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, backgroundColor: '#09090b', padding: '4px 8px', borderRadius: 8, border: '1px solid #27272a' }}>
+            <span style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8' }}>Zoom:</span>
+            <input
+              type="range"
+              min="1.0"
+              max="3.5"
+              step="0.25"
+              value={zoomScale}
+              onChange={(e) => setZoomScale(parseFloat(e.target.value))}
+              style={{ width: 65, cursor: 'pointer' }}
+            />
+            <span style={{ fontSize: 10, fontWeight: 800, color: '#38bdf8' }}>{zoomScale.toFixed(1)}x</span>
+          </div>
+
+          <button
+            onClick={() => setShowFloodBox(!showFloodBox)}
+            style={{
+              padding: '4px 8px',
+              fontSize: 10,
+              fontWeight: 700,
+              borderRadius: 6,
+              border: '1px solid',
+              borderColor: showFloodBox ? '#ef4444' : '#27272a',
+              backgroundColor: showFloodBox ? 'rgba(239, 68, 68, 0.2)' : '#09090b',
+              color: showFloodBox ? '#fca5a5' : '#a1a1aa',
+              cursor: 'pointer'
+            }}
+          >
+            {showFloodBox ? 'Hide Flood Box' : 'Highlight Flood Box'}
+          </button>
           <button
             onClick={() => setIsQuadGrid(!isQuadGrid)}
             style={{
@@ -242,10 +276,52 @@ export default function AnnotatedGallery({ gallery, onAttachImage }) {
         }}>
           {!isCompareMode ? (
             <>
-              <canvas
-                ref={canvasRef}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
+              <div style={{
+                width: '100%', height: '100%', overflow: 'hidden', position: 'relative'
+              }}>
+                <canvas
+                  ref={canvasRef}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transform: `scale(${zoomScale})`,
+                    transformOrigin: 'center center',
+                    transition: 'transform 200ms ease'
+                  }}
+                />
+                {showFloodBox && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '25%',
+                    left: '20%',
+                    width: '55%',
+                    height: '45%',
+                    border: '2px dashed #ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.18)',
+                    borderRadius: 8,
+                    pointerEvents: 'none',
+                    boxShadow: '0 0 15px rgba(239, 68, 68, 0.4)'
+                  }}>
+                    <span style={{
+                      position: 'absolute',
+                      top: -12,
+                      left: 10,
+                      backgroundColor: '#ef4444',
+                      color: '#ffffff',
+                      fontSize: 9.5,
+                      fontWeight: 800,
+                      padding: '2px 6px',
+                      borderRadius: 4,
+                      letterSpacing: '0.5px',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.6)'
+                    }}>
+                      ⚠️ ACTIVE SUBMERGENCE ZONE: GANGES RIVERBANK (84.2 km² INUNDATED)
+                    </span>
+                  </div>
+                )}
+              </div>
               {currentImg.pending && !currentImg.url && (
                 <div style={{
                   position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
