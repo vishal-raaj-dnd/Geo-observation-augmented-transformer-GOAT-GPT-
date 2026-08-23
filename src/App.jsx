@@ -247,6 +247,7 @@ export default function App() {
     const HF_SPACE_URL = `https://dinesh-07-dev-goat-gpt-backend.hf.space/api/predict`;
 
     let isFinished = false;
+    let hasReceivedMessage = false;
     let fallbackTimer = null;
 
     const finalizeOnce = (deliverables, fullText) => {
