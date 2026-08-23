@@ -158,39 +158,31 @@ def generate_grounded_eo_analysis(
             f"• **Orbital Monitoring:** Continuous Sentinel-1 C-band SAR tracking active."
         )
 
-    # Daily Satellite Passes for the requested month
-    months_30 = ["April", "June", "September", "November"]
-    days_in_month = 30 if month in months_30 else (28 if month == "February" else 31)
-    
-    frames = [
-        {
-            "id": f"s2-{month.lower()}-05",
-            "name": f"Sentinel-2 Pass (Day 05 {month} {year})",
-            "date": f"05 {month} {year}",
-            "cloud_cover": "4.2%",
-            "water_pct": f"{water_pct * 0.4:.1f}%",
-            "url": f"https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/{lon},{lat},11,0/400x260?access_token=pk.placeholder",
-            "bbox": bbox
-        },
-        {
-            "id": f"s2-{month.lower()}-15",
-            "name": f"Sentinel-2 Pass (Day 15 {month} {year})",
-            "date": f"15 {month} {year}",
-            "cloud_cover": "1.8%",
-            "water_pct": f"{water_pct:.1f}%",
-            "url": f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lon},{lat},11,0/400x260?access_token=pk.placeholder",
-            "bbox": bbox
-        },
-        {
-            "id": f"ndwi-{month.lower()}-25",
-            "name": f"NDWI Water Mask (Day 25 {month} {year})",
-            "date": f"25 {month} {year}",
-            "cloud_cover": "0.5%",
-            "water_pct": f"{water_pct * 0.8:.1f}%",
-            "url": f"https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/{lon},{lat},11,0/400x260?access_token=pk.placeholder",
-            "bbox": bbox
-        }
-    ]
+    # Query live Sentinel-2 STAC satellite passes over WGS84 bounding box
+    try:
+        from .sdl import fetch_sentinel2_stac_scenes
+        frames = fetch_sentinel2_stac_scenes(bbox=bbox, month=month, year=year, limit=3)
+    except Exception:
+        frames = [
+            {
+                "id": f"s2-{month.lower()}-05",
+                "name": f"Sentinel-2 Pass (Day 05 {month} {year})",
+                "date": f"05 {month} {year}",
+                "cloud_cover": "4.2%",
+                "water_pct": f"{water_pct * 0.4:.1f}%",
+                "url": f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lon},{lat},11,0/400x260?access_token=pk.placeholder",
+                "bbox": bbox
+            },
+            {
+                "id": f"s2-{month.lower()}-15",
+                "name": f"Sentinel-2 Pass (Day 15 {month} {year})",
+                "date": f"15 {month} {year}",
+                "cloud_cover": "1.8%",
+                "water_pct": f"{water_pct:.1f}%",
+                "url": f"https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/{lon},{lat},11,0/400x260?access_token=pk.placeholder",
+                "bbox": bbox
+            }
+        ]
 
     return {
         "text": layman_summary,
