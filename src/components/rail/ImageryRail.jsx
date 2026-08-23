@@ -255,6 +255,41 @@ export default function ImageryRail({
                 NDWI spectral indices available when water analysis is active.
               </div>
             )}
+
+            {/* Scientific NDWI Inundation Danger Threshold Gauge */}
+            <div style={{
+              marginTop: 12,
+              padding: '12px',
+              backgroundColor: 'rgba(9, 9, 11, 0.8)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              borderRadius: 10,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 8
+            }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: '#ffffff', letterSpacing: '0.4px' }}>
+                📊 NDWI Scientific Inundation Threshold Gauge
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5, fontSize: 10.5, fontWeight: 600 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 8px', borderRadius: 5, backgroundColor: 'rgba(34, 197, 94, 0.1)', color: '#4ade80' }}>
+                  <span>🟢 NDWI &lt; -0.10</span>
+                  <span style={{ fontWeight: 800 }}>Dry Soil / Vegetation (SAFE)</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 8px', borderRadius: 5, backgroundColor: 'rgba(234, 179, 8, 0.1)', color: '#fde047' }}>
+                  <span>🟡 -0.10 to +0.05</span>
+                  <span style={{ fontWeight: 800 }}>Saturated Soil (WATCH)</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 8px', borderRadius: 5, backgroundColor: 'rgba(249, 115, 22, 0.1)', color: '#fdba74' }}>
+                  <span>🟠 +0.05 to +0.20</span>
+                  <span style={{ fontWeight: 800 }}>Surface Water (WARNING)</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 8px', borderRadius: 5, backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
+                  <span>🔴 NDWI &gt; +0.20</span>
+                  <span style={{ fontWeight: 800 }}>Critical Submergence (DANGER)</span>
+                </div>
+              </div>
+            </div>
           </>
         )}
 
