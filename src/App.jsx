@@ -145,17 +145,19 @@ export default function App() {
     return () => { cancelled = true; };
   }, []);
 
-  // Load messages when active conversation changes
+  const isSendingRef = useRef(false);
+
+  // Load messages when user deliberately selects a conversation from history
   useEffect(() => {
-    if (!activeConversationId) return;
+    if (!activeConversationId || isSendingRef.current) return;
     let cancelled = false;
     getStoredMessages(activeConversationId)
       .then(msgs => {
-        if (cancelled) return;
+        if (cancelled || isSendingRef.current) return;
         const list = Array.isArray(msgs) ? msgs : [];
         setMessages(list);
       })
-      .catch(() => { if (!cancelled) setMessages([]); });
+      .catch(() => { if (!cancelled && !isSendingRef.current) setMessages([]); });
     return () => { cancelled = true; };
   }, [activeConversationId]);
 
@@ -178,6 +180,8 @@ export default function App() {
   const handleSendQuery = async (queryTextOverride) => {
     const textToSend = queryTextOverride || prompt;
     if (!textToSend || !textToSend.trim()) return;
+
+    isSendingRef.current = true;
 
     // Auto-detect if query mentions any city in our catalog (e.g. Bhagalpur, Mumbai, Pune)
     let activeCity = cityName;
@@ -255,7 +259,11 @@ export default function App() {
         text: m.text || payload?.deliverables?.text || m.text
       } : m)));
     };
-    const stopLoading = () => { setIsToolLoading(false); setToolStepText(''); };
+    const stopLoading = () => {
+      isSendingRef.current = false;
+      setIsToolLoading(false);
+      setToolStepText('');
+    };
 
     const LOCAL_BACKEND = `http://localhost:8000/api/chat/stream?query=${encodeURIComponent(textToSend)}&city=${encodeURIComponent(activeCity)}&state=${encodeURIComponent(activeState)}&month=${encodeURIComponent(dateTime.split(' ')[0] || 'August')}&year=${encodeURIComponent(dateTime.split(' ')[1] || '2026')}`;
     const HF_SPACE_URL = `https://dinesh-07-dev-goat-gpt-backend.hf.space/api/predict`;
@@ -267,6 +275,7 @@ export default function App() {
     const finalizeOnce = (deliverables, fullText) => {
       if (isFinished) return;
       isFinished = true;
+      isSendingRef.current = false;
       if (fallbackTimer) clearTimeout(fallbackTimer);
       finalizeMsg({ deliverables: deliverables || { text: fullText } });
       saveStoredMessage(convId, {
