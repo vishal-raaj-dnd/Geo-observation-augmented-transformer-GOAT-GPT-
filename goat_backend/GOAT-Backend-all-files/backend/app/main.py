@@ -158,10 +158,15 @@ def generate_grounded_eo_analysis(
             f"• **Orbital Monitoring:** Continuous Sentinel-1 C-band SAR tracking active."
         )
 
-    esri_url = f"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox={bbox[0]},{bbox[1]},{bbox[2]},{bbox[3]}&bboxSR=4326&imageSR=4326&size=600,400&f=image"
+    cx, cy = (bbox[0] + bbox[2]) / 2.0, (bbox[1] + bbox[3]) / 2.0
+    w_tight, e_tight = cx - 0.06, cx + 0.06
+    s_tight, n_tight = cy - 0.04, cy + 0.04
+    esri_url = f"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox={w_tight:.4f},{s_tight:.4f},{e_tight:.4f},{n_tight:.4f}&bboxSR=4326&imageSR=4326&size=800,500&f=image"
+    tight_bbox = [w_tight, s_tight, e_tight, n_tight]
+
     try:
         from .sdl import fetch_sentinel2_stac_scenes
-        frames = fetch_sentinel2_stac_scenes(bbox=bbox, month=month, year=year, limit=3)
+        frames = fetch_sentinel2_stac_scenes(bbox=tight_bbox, month=month, year=year, limit=3)
     except Exception:
         frames = [
             {
@@ -171,7 +176,7 @@ def generate_grounded_eo_analysis(
                 "cloud_cover": "4.2%",
                 "water_pct": f"{water_pct * 0.4:.1f}%",
                 "url": esri_url,
-                "bbox": bbox
+                "bbox": tight_bbox
             },
             {
                 "id": f"s2-{month.lower()}-15",
@@ -180,7 +185,7 @@ def generate_grounded_eo_analysis(
                 "cloud_cover": "1.8%",
                 "water_pct": f"{water_pct:.1f}%",
                 "url": esri_url,
-                "bbox": bbox
+                "bbox": tight_bbox
             }
         ]
 

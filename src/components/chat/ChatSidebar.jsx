@@ -342,67 +342,6 @@ export default function ChatSidebar({
                     )}
 
                     {/* MAP ACTION CHIPS — chat drives the map (manual mode) */}
-                    {!isUser && msg.deliverables && !msg.streaming && Object.keys(msg.deliverables).length > 0 && (
-                      <div style={{
-                        marginTop: 4,
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: 6,
-                        padding: '8px 10px',
-                        backgroundColor: 'rgba(9, 9, 11, 0.6)',
-                        border: '1px dashed rgba(56, 189, 248, 0.35)',
-                        borderRadius: 10,
-                        width: '100%'
-                      }}>
-                        <span style={{ fontSize: 9.5, fontWeight: 800, color: '#7dd3fc', letterSpacing: '0.8px', textTransform: 'uppercase', width: '100%', marginBottom: 2 }}>
-                          Visualize on map
-                        </span>
-                        {actionChips.map(chip => (
-                          <button
-                            key={chip.id}
-                            onClick={chip.onClick}
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: 5,
-                              fontSize: 10.5,
-                              fontWeight: 600,
-                              color: '#7dd3fc',
-                              backgroundColor: 'rgba(56, 189, 248, 0.08)',
-                              border: '1px solid rgba(56, 189, 248, 0.35)',
-                              borderRadius: 14,
-                              padding: '4px 10px',
-                              cursor: 'pointer',
-                              transition: 'all 150ms ease'
-                            }}
-                            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(56, 189, 248, 0.2)'; }}
-                            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(56, 189, 248, 0.08)'; }}
-                          >
-                            {chip.icon}
-                            {chip.label}
-                          </button>
-                        ))}
-                        <button
-                          onClick={() => dispatchMapCommand('clearOverlays', {})}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 5,
-                            fontSize: 10.5,
-                            fontWeight: 600,
-                            color: '#fca5a5',
-                            backgroundColor: 'rgba(239, 68, 68, 0.07)',
-                            border: '1px solid rgba(239, 68, 68, 0.3)',
-                            borderRadius: 14,
-                            padding: '4px 10px',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          <X size={11} />
-                          Clear Layers
-                        </button>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

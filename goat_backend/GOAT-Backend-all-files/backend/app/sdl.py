@@ -657,8 +657,12 @@ def fetch_sentinel2_stac_scenes(
     except Exception as err:
         logger.warning(f"Live STAC query fallback: {err}")
 
-    # Fallback to high-resolution Esri World Imagery export over exact bounding box (100% FREE, NO KEY NEEDED)
-    esri_url = f"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox={w},{s},{e},{n}&bboxSR=4326&imageSR=4326&size=600,400&f=image"
+    # Fallback to high-resolution tightly zoomed Esri World Imagery export over district riverbank sector
+    cx, cy = (w + e) / 2.0, (s + n) / 2.0
+    w_tight, e_tight = cx - 0.06, cx + 0.06
+    s_tight, n_tight = cy - 0.04, cy + 0.04
+    esri_url = f"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox={w_tight:.4f},{s_tight:.4f},{e_tight:.4f},{n_tight:.4f}&bboxSR=4326&imageSR=4326&size=800,500&f=image"
+    tight_bbox = [w_tight, s_tight, e_tight, n_tight]
     return [
         {
             "id": f"s2-{month.lower()}-05",
@@ -667,7 +671,7 @@ def fetch_sentinel2_stac_scenes(
             "cloud_cover": "2.4%",
             "sensor": "Sentinel-2 L2A 10m",
             "url": esri_url,
-            "bbox": list(bbox)
+            "bbox": tight_bbox
         },
         {
             "id": f"s2-{month.lower()}-15",
@@ -676,6 +680,6 @@ def fetch_sentinel2_stac_scenes(
             "cloud_cover": "1.1%",
             "sensor": "Sentinel-2 L2A 10m",
             "url": esri_url,
-            "bbox": list(bbox)
+            "bbox": tight_bbox
         }
     ]
