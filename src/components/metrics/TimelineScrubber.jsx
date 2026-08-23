@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 
-export default function TimelineScrubber({ onDayChange }) {
-  const days = [
-    { label: "T-3 Days", date: "2026-08-17", status: "Pre-event baseline capture", water_pct: "2.1%", ndwi: "-0.214", cloud: "3.2%" },
-    { label: "T-2 Days", date: "2026-08-18", status: "Rainfall initiation pass", water_pct: "8.1%", ndwi: "+0.015", cloud: "4.8%" },
-    { label: "T-1 Day", date: "2026-08-19", status: "Peak surge onset capture", water_pct: "14.2%", ndwi: "+0.082", cloud: "2.1%" },
-    { label: "Today (T0)", date: "2026-08-20", status: "Max inundation multi-spectral pass", water_pct: "18.5%", ndwi: "+0.140", cloud: "1.2%" }
-  ];
+export default function TimelineScrubber({ frames = [], onDayChange }) {
+  // Construct dynamic timeline passes from real satellite frames
+  const days = frames.length > 0
+    ? frames.map((f, i) => ({
+        label: f.date ? `Pass ${i + 1} (${f.date})` : `Pass ${i + 1}`,
+        date: f.date || 'Live Capture',
+        status: f.sensor || 'Sentinel-2 L2A STAC',
+        water_pct: f.water_pct || (f.cloud_cover ? `Cloud: ${f.cloud_cover}` : 'Active'),
+        ndwi: f.ndwi || 'Computed',
+        frame: f
+      }))
+    : [
+        { label: "Baseline Capture (T-Pre)", date: "Pre-event", status: "Sentinel-2 L2A 10m", water_pct: "Baseline", ndwi: "Reference" },
+        { label: "Peak Flood Pass (T-Post)", date: "Active Event", status: "Sentinel-2 L2A 10m", water_pct: "Inundation", ndwi: "Evaluated" }
+      ];
 
   const [activeDayIdx, setActiveDayIdx] = useState(3);
 

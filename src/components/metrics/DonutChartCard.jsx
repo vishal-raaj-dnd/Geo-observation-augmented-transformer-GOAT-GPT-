@@ -3,13 +3,11 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import { PieChart as PieIcon } from 'lucide-react';
 
 export default function DonutChartCard({ data }) {
-  const rawData = data || [
-    { name: "Agricultural Cropland", value: 52, fill: "#3b82f6" },
-    { name: "Residential Wards", value: 33, fill: "#ef4444" },
-    { name: "Infrastructure & Utilities", value: 15, fill: "#f59e0b" }
-  ];
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return null;
+  }
 
-  const chartData = rawData.map(item => ({
+  const chartData = data.map(item => ({
     name: item.name || item.category || "Sector",
     value: item.value !== undefined ? item.value : (item.percentage !== undefined ? item.percentage : 0),
     fill: item.fill || item.color || "#38bdf8"

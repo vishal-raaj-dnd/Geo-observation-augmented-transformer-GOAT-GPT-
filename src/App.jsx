@@ -295,6 +295,7 @@ export default function App() {
 
     async function callHuggingFaceGPU() {
       try {
+        setToolStepText(`Connecting to Hugging Face GPU Space (dinesh-07-dev/goat-gpt-backend)...`);
         const resp = await fetch(HF_SPACE_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -302,70 +303,29 @@ export default function App() {
         });
         if (resp.ok) {
           const data = await resp.json();
-          const resultText = data.data?.[1] || data.data?.[0] || "Hugging Face GPU Analysis Complete";
+          const resultText = data.data?.[1] || data.data?.[0] || "Model inference complete.";
           appendDelta(resultText);
+          finalizeMsg({
+            deliverables: {
+              telemetry: {
+                model_name: "Qwen2.5-VL-3B-Instruct (ZeroGPU)",
+                sensor: "Sentinel-2 L2A STAC"
+              },
+              text: resultText
+            }
+          });
           stopLoading();
           return;
         }
-      } catch (err) {}
-      runLocalSimulation();
-    }
+      } catch (err) {
+        console.warn("HF Space call error:", err);
+      }
 
-    function runLocalSimulation() {
-      const coordLabel = Array.isArray(cityCoords)
-        ? `[${cityCoords[1].toFixed(3)}°N, ${cityCoords[0].toFixed(3)}°E]`
-        : '[13.082°N, 80.270°E]';
-
-      const isFakeTest = textToSend.toLowerCase().includes('fake') || textToSend.toLowerCase().includes('dry') || textToSend.toLowerCase().includes('test');
-      const fallbackText = isFakeTest
-        ? `### GOAT GPT Grounded EO Analysis — ${activeCity}, ${activeState}\n\n1. **Spectral NDWI Analysis & Grounded Evidence:**\nSentinel-2 optical and SAR pass evaluation over ${activeCity}, ${activeState} ${coordLabel} confirms **no flood activity** for this query.\nCalculated Normalized Difference Water Index (NDWI) is **-0.04 (Dry/Seasonal Land)**, falling strictly below the +0.10 open-water threshold.\n\n2. **Population & Sector Safety:**\nZero urban or agricultural land submergence detected (**0.0 km²** flooded area). Residential wards and critical infrastructure remain 100% dry.\n\n3. **Truthfulness Verification:**\n• **Status:** Ground-Truth Un-Submerged.\n• **Confidence:** 99.4% (Sentinel-2 L2A Band Math Confirmed).`
-        : `### GOAT GPT Earth Observation Analysis — ${activeCity}, ${activeState}\n\n1. **GEO Observation Spectral & SAR Telemetry:**\nSentinel-2 MSI optical composite and Synthetic Aperture Radar (SAR) orbital passes over ${activeCity}, ${activeState} ${coordLabel} confirm active surface water accumulation. Calculated Normalized Difference Water Index (NDWI) identifies approximately **84.2 km²** of submerged land.\n\n2. **Impact & Population Vulnerability:**\nAn estimated **18,400 residents** across low-lying sector wards are exposed. Peak water submergence depth reaches **1.8 meters**.\n\n3. **Directives & Risk Mitigation:**\n• **Evacuation Directive:** Mandatory evacuation protocol for low-lying wards adjacent to primary riverbanks.\n• **Infrastructure Defense:** Heavy-duty de-watering pumps advised for key power sub-stations in ${activeCity}.\n• **Orbital Pass:** Sentinel-1 C-band SAR pass scheduled for continuous flood recession tracking.`;
-
-      const fallbackDeliverables = {
-        telemetry: {
-          model_name: "GOAT GPT Qwen2.5-VL 3B (Team ATLAS)",
-          inference_time_sec: 0.74,
-          confidence_score_pct: isFakeTest ? 99.4 : 98.8,
-          sensor: "Sentinel-1 SAR / Sentinel-2 MSI"
-        },
-        metrics: {
-          mean_ndwi_score: isFakeTest ? "-0.04 NDWI Score" : "+0.14 NDWI Score",
-          flooded_area_sqkm: isFakeTest ? "0.0 km²" : "84.2 km²",
-          affected_population: isFakeTest ? "0 Residents Exposed" : "18,400 Residents Exposed",
-          sector_classification: "Urban Grid & Agricultural Zone"
-        },
-        lineChartData: [
-          { day: "T-4", level: isFakeTest ? 0.05 : 0.4 },
-          { day: "T-3", level: isFakeTest ? 0.08 : 0.8 },
-          { day: "Peak", level: isFakeTest ? 0.06 : 1.8 },
-          { day: "T+1", level: isFakeTest ? 0.04 : 1.1 }
-        ],
-        donutChartData: isFakeTest
-          ? [{ name: "Unsubmerged Dry Land", value: 100, fill: "#38bdf8" }]
-          : [
-              { name: "Agricultural Cropland", value: 54, fill: "#10b981" },
-              { name: "Residential Wards", value: 31, fill: "#ef4444" },
-              { name: "Infrastructure & Utilities", value: 15, fill: "#f59e0b" }
-            ],
-        gallery: []
-      };
-
-      const words = fallbackText.split(' ');
-      let wordIdx = 0;
-      const typewriter = setInterval(() => {
-        const batch = words.slice(wordIdx, wordIdx + 4).join(' ');
-        wordIdx += 4;
-        if (batch) appendDelta(batch + ' ');
-        if (wordIdx >= words.length) {
-          clearInterval(typewriter);
-          finalizeMsg({ deliverables: fallbackDeliverables });
-          saveStoredMessage(convId, {
-            id: aiMsgId, sender: 'ai', text: fallbackText,
-            deliverables: fallbackDeliverables, timestamp: aiTimestamp
-          });
-          stopLoading();
-        }
-      }, 40);
+      // If both local and HF GPU are offline, inform user authentically
+      const offlineMsg = `### System Status: Remote GPU Model Connection\n\nUnable to establish connection with Hugging Face ZeroGPU endpoint (\`dinesh-07-dev/goat-gpt-backend\`) and local backend on port 8000.\n\nPlease verify that your Hugging Face Space is active or the local backend is started (\`python -m backend.app.main\`).`;
+      appendDelta(offlineMsg);
+      finalizeMsg({ deliverables: { text: offlineMsg } });
+      stopLoading();
     }
   };
 

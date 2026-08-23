@@ -317,7 +317,7 @@ export default function AnnotatedGallery({ gallery, onAttachImage }) {
                       letterSpacing: '0.5px',
                       boxShadow: '0 2px 8px rgba(0,0,0,0.6)'
                     }}>
-                      ⚠️ ACTIVE SUBMERGENCE ZONE: GANGES RIVERBANK (84.2 km² INUNDATED)
+                      ⚠️ ACTIVE SUBMERGENCE ZONE: {currentImg.title || currentImg.name || 'MULTI-SPECTRAL WATER EXTENT'}
                     </span>
                   </div>
                 )}

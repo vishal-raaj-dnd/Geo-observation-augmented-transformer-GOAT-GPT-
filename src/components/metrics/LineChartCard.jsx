@@ -3,21 +3,17 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianG
 import { Activity } from 'lucide-react';
 
 export default function LineChartCard({ data }) {
-  const rawData = data || [
-    { day: "T-4", level: 1.2, baseline: 1.5 },
-    { day: "T-3", level: 2.1, baseline: 1.5 },
-    { day: "T-2", level: 3.4, baseline: 1.5 },
-    { day: "Peak", level: 4.2, baseline: 1.5 },
-    { day: "T+1", level: 3.8, baseline: 1.5 }
-  ];
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return null;
+  }
 
-  const chartData = rawData.map(item => ({
+  const chartData = data.map(item => ({
     day: item.day || item.date || item.label,
-    water_level_m: parseFloat(item.level !== undefined ? item.level : (item.water_level_m !== undefined ? item.water_level_m : 2.5)),
+    water_level_m: parseFloat(item.level !== undefined ? item.level : (item.water_level_m !== undefined ? item.water_level_m : 0)),
     threshold_m: 1.8
   }));
 
-  const maxVal = Math.max(...chartData.map(d => d.water_level_m), 4.5);
+  const maxVal = Math.max(...chartData.map(d => d.water_level_m), 3.0);
 
   return (
     <div style={{

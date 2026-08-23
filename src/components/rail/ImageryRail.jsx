@@ -219,7 +219,7 @@ export default function ImageryRail({
                 <FrameCard key={frame.id || idx} frame={frame} onOverlay={handleOverlay} />
               ))
             )}
-            <TimelineScrubber onDayChange={handleTimelineDayChange} />
+            <TimelineScrubber frames={allFrames} onDayChange={handleTimelineDayChange} />
           </div>
         )}
 
