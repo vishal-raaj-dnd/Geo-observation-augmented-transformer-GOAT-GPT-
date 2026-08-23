@@ -155,9 +155,8 @@ export default function ChatSidebar({
   ].filter(Boolean);
 
   const presetChips = [
-    'Analyze Sentinel-2 NDWI Water Submergence',
-    'Quantify Agricultural Crop Loss in Hectares',
-    'Evaluate Population Exposure in Floodplain Wards'
+    '🌊 Real Flood Event: Evaluate Severe Flood Submergence in Bhagalpur',
+    '🛡️ False Alarm Test: Verify Claimed Flood in Dry Region (Trustworthiness Test)'
   ];
 
   return (

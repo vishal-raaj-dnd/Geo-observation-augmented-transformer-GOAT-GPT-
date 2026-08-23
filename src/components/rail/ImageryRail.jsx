@@ -238,6 +238,23 @@ export default function ImageryRail({
         {tab === 'charts' && (
           latestDeliverables ? (
             <>
+              {latestDeliverables.verification && (
+                <div style={{
+                  fontSize: 10.5,
+                  fontWeight: 700,
+                  color: '#10b981',
+                  backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  padding: '9px 12px',
+                  borderRadius: 8,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}>
+                  <span>🛡️ Ground-Truth Engine: {latestDeliverables.verification.truthfulness_score}</span>
+                  <span style={{ color: '#38bdf8' }}>{latestDeliverables.verification.copernicus_ground_truth_match}</span>
+                </div>
+              )}
               {latestDeliverables.telemetry && (
                 <div style={{
                   fontSize: 10,
