@@ -4,7 +4,7 @@ import TimelineScrubber from './TimelineScrubber';
 
 export default function AnnotatedGallery({ gallery, onAttachImage }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [activeBandMode, setActiveBandMode] = useState('RGB'); // RGB, NIR, NDWI, NDVI
+  const [activeBandMode, setActiveBandMode] = useState('NDWI'); // Default to NDWI Water Inundation Heatmap
   const [isQuadGrid, setIsQuadGrid] = useState(false); // 4-Quadrant Tactical Grid Viewport
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [sliderPos, setSliderPos] = useState(50);
@@ -19,11 +19,11 @@ export default function AnnotatedGallery({ gallery, onAttachImage }) {
 
   const images = (gallery && gallery.length > 0) ? gallery : [
     {
-      id: "sat-default-rgb",
-      title: "High-Resolution Sentinel-2 / Landsat-9 Satellite Frame",
-      url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=80.14,12.85,80.33,13.23&bboxSR=4326&imageSR=4326&size=1024,600&format=jpg&f=image",
+      id: "sat-nasa-modis721",
+      title: "NASA GIBS SWIR False-Color (Bands 7-2-1) Water Inundation Raster",
+      url: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=MODIS_Terra_CorrectedReflectance_Bands721&STYLES=&FORMAT=image/jpeg&BBOX=86.85,25.15,87.15,25.35&WIDTH=1024&HEIGHT=600&SRS=EPSG:4326",
       annotations: [
-        { label: "Municipal Primary Sector Bounds", box: [200, 40, 380, 160] }
+        { label: "Active Submergence Sector", box: [180, 50, 420, 180] }
       ]
     }
   ];

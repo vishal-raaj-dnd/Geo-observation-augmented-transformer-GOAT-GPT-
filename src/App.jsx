@@ -94,13 +94,27 @@ export default function App() {
   }, [cityName, stateName]);
 
   // Resolve REAL satellite frames once per location
+  // Resolve REAL satellite frames once per location & auto-overlay onto 3D map
   const [imagery, setImagery] = useState(null);
   useEffect(() => {
     if (!cityBbox) return;
     let cancelled = false;
     setImagery(null);
     resolveCityImagery(cityBbox, cityName, stateName, toIsoMonth(dateTime))
-      .then(res => { if (!cancelled && res) setImagery(res); })
+      .then(res => {
+        if (!cancelled && res) {
+          setImagery(res);
+          const waterFrame = res.frames.find(f => f.id === 'falsecolor-modis721') || res.frames[0];
+          if (waterFrame && cityBbox) {
+            dispatchMapCommand('overlayImage', {
+              id: waterFrame.id,
+              url: waterFrame.url,
+              bounds: waterFrame.bbox || cityBbox,
+              title: waterFrame.title || 'NASA GIBS Satellite Water Inundation'
+            });
+          }
+        }
+      })
       .catch(err => console.warn('[App] imagery resolution failed:', err));
     return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps

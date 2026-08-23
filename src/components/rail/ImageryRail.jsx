@@ -51,28 +51,20 @@ function FrameCard({ frame, onOverlay }) {
           <Calendar size={12} style={{ color: '#38bdf8' }} />
           {frame.name || frame.title || frame.date}
         </div>
-        <button
-          onClick={() => onOverlay(frame)}
-          disabled={!isAvailable}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 6,
-            fontSize: 10.5,
-            fontWeight: 700,
-            color: isAvailable ? '#09090b' : '#52525b',
-            backgroundColor: isAvailable ? '#38bdf8' : '#27272a',
-            border: 'none',
-            borderRadius: 6,
-            padding: '6px 10px',
-            cursor: isAvailable ? 'pointer' : 'not-allowed',
-            transition: 'all 150ms ease'
-          }}
-        >
-          <Plus size={12} />
-          Overlay Satellite Scene on Map
-        </button>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          fontSize: 10,
+          fontWeight: 600,
+          color: '#38bdf8',
+          backgroundColor: 'rgba(56, 189, 248, 0.08)',
+          border: '1px solid rgba(56, 189, 248, 0.2)',
+          borderRadius: 5,
+          padding: '4px 8px'
+        }}>
+          <span>🛰️ {frame.band || 'Multi-Spectral Pass'}</span>
+        </div>
       </div>
     </div>
   );

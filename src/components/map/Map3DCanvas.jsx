@@ -358,6 +358,14 @@ export default function Map3DCanvas({
     const { type, payload } = mapCommand;
 
     switch (type) {
+      case 'overlayImage':
+        runWhenReady(map => {
+          if (payload) {
+            applyImageOverlay(map, payload);
+          }
+        });
+        break;
+
       case 'flyTo':
         runWhenReady(map => map.flyTo({
           center: payload.center,
