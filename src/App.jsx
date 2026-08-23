@@ -7,6 +7,7 @@ import ChatSidebar from './components/chat/ChatSidebar';
 import ImageryRail from './components/rail/ImageryRail';
 import MetricCardGrid from './components/metrics/MetricCardGrid';
 import { resolveCityImagery } from './services/imagery';
+import { STATE_CITIES } from './data/cities';
 import {
   getStoredConversations,
   saveStoredConversation,

@@ -100,8 +100,16 @@ export default function ChatSidebar({
   }, [messages, isToolLoading, toolStepText]);
 
   const handleSend = (textToSend) => {
-    const query = textToSend !== undefined ? textToSend : inputText;
-    if (!query || !query.trim()) {
+    let query = '';
+    if (typeof textToSend === 'string') {
+      query = textToSend;
+    } else if (textToSend && typeof textToSend === 'object' && typeof textToSend.query === 'string') {
+      query = textToSend.query;
+    } else {
+      query = inputText;
+    }
+
+    if (!query || typeof query !== 'string' || !query.trim()) {
       setValidationError('Please type a query first');
       setTimeout(() => setValidationError(''), 2500);
       return;
