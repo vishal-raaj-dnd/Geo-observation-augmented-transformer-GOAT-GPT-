@@ -158,7 +158,7 @@ def generate_grounded_eo_analysis(
             f"• **Orbital Monitoring:** Continuous Sentinel-1 C-band SAR tracking active."
         )
 
-    # Query live Sentinel-2 STAC satellite passes over WGS84 bounding box
+    esri_url = f"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox={bbox[0]},{bbox[1]},{bbox[2]},{bbox[3]}&bboxSR=4326&imageSR=4326&size=600,400&f=image"
     try:
         from .sdl import fetch_sentinel2_stac_scenes
         frames = fetch_sentinel2_stac_scenes(bbox=bbox, month=month, year=year, limit=3)
@@ -170,7 +170,7 @@ def generate_grounded_eo_analysis(
                 "date": f"05 {month} {year}",
                 "cloud_cover": "4.2%",
                 "water_pct": f"{water_pct * 0.4:.1f}%",
-                "url": f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lon},{lat},11,0/400x260?access_token=pk.placeholder",
+                "url": esri_url,
                 "bbox": bbox
             },
             {
@@ -179,7 +179,7 @@ def generate_grounded_eo_analysis(
                 "date": f"15 {month} {year}",
                 "cloud_cover": "1.8%",
                 "water_pct": f"{water_pct:.1f}%",
-                "url": f"https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/{lon},{lat},11,0/400x260?access_token=pk.placeholder",
+                "url": esri_url,
                 "bbox": bbox
             }
         ]
