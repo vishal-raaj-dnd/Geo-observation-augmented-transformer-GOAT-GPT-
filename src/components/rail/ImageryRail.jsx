@@ -116,6 +116,13 @@ export default function ImageryRail({
     { id: 'charts', label: 'Charts', icon: <BarChart3 size={12} /> }
   ].filter(Boolean);
 
+  const handleTimelineDayChange = (selectedDay) => {
+    if (allFrames.length > 0) {
+      const match = allFrames.find(f => f.date && f.date.includes(selectedDay.date)) || allFrames[0];
+      if (match) handleOverlay(match);
+    }
+  };
+
   return (
     <aside style={{
       position: 'absolute',
@@ -212,7 +219,7 @@ export default function ImageryRail({
                 <FrameCard key={frame.id || idx} frame={frame} onOverlay={handleOverlay} />
               ))
             )}
-            <TimelineScrubber />
+            <TimelineScrubber onDayChange={handleTimelineDayChange} />
           </div>
         )}
 

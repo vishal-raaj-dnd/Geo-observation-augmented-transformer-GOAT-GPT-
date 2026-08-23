@@ -567,17 +567,17 @@ export default function Map3DCanvas({
         if (!isMinimized) {
           mapRef.current.fitBounds(geojsonBbox(geojson), {
             padding: {
-              top: 110,
-              bottom: 150,
+              top: 100,
+              bottom: 120,
               left: (fitPadding && fitPadding.left) || 60,
               right: (fitPadding && fitPadding.right) || 80
             },
-            pitch: 40,
-            bearing: -12,
+            pitch: 35,
+            bearing: -8,
             duration: 900,
             essential: true,
             curve: 1.42,
-            maxZoom: 11.5
+            maxZoom: isSatellite ? 14.5 : 13.0
           });
         }
       };

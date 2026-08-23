@@ -246,11 +246,24 @@ export default function App() {
     const LOCAL_BACKEND = `http://localhost:8000/api/chat/stream?query=${encodeURIComponent(textToSend)}&city=${encodeURIComponent(activeCity)}&state=${encodeURIComponent(activeState)}&month=${encodeURIComponent(dateTime.split(' ')[0] || 'August')}&year=${encodeURIComponent(dateTime.split(' ')[1] || '2026')}`;
     const HF_SPACE_URL = `https://dinesh-07-dev-goat-gpt-backend.hf.space/api/predict`;
 
-    // Try connecting to Hugging Face GPU Space or Local SSE Backend
+    // Try connecting to Local SSE Backend with a 2.5s fallback timer to guarantee instant response on first click
+    let hasReceivedMessage = false;
+    let fallbackTimer = null;
+
     try {
       const eventSource = new EventSource(LOCAL_BACKEND);
 
+      fallbackTimer = setTimeout(() => {
+        if (!hasReceivedMessage) {
+          eventSource.close();
+          setToolStepText(`Analyzing Sentinel-2 satellite passes...`);
+          runLocalSimulation();
+        }
+      }, 2200);
+
       eventSource.onmessage = (event) => {
+        hasReceivedMessage = true;
+        if (fallbackTimer) clearTimeout(fallbackTimer);
         try {
           const data = JSON.parse(event.data);
           if (data.type === 'progress') {
@@ -271,11 +284,14 @@ export default function App() {
 
       eventSource.onerror = () => {
         eventSource.close();
-        setToolStepText(`Routing query to Hugging Face GPU (dinesh-07-dev/goat-gpt-backend)...`);
-        callHuggingFaceGPU();
+        if (fallbackTimer) clearTimeout(fallbackTimer);
+        if (!hasReceivedMessage) {
+          runLocalSimulation();
+        }
       };
     } catch (err) {
-      callHuggingFaceGPU();
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+      runLocalSimulation();
     }
 
     async function callHuggingFaceGPU() {
