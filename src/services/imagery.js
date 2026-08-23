@@ -117,12 +117,13 @@ async function computeRealNdwi(bbox, cityLabel, dateStr) {
 
   // 2. Read reduced-resolution windows from both COGs
   const SIZE = 320;
-  const readBand = async (href) => {
+  const readBand = async (href, onSize) => {
     const tif = await GeoTIFF.fromUrl(href);
     const image = await tif.getImage();
     const [bw, bs, be, bn] = image.getBoundingBox(); // UTM meters
     const { easting, northing } = latLonToUTM(centerLat, centerLon);
     const halfW = Math.max((be - bw) * 0.06, 3000);
+    if (onSize) onSize(halfW);
     const x0 = Math.max(0, Math.min(image.getWidth(), Math.floor(((easting - halfW) - bw) / (be - bw) * image.getWidth())));
     const x1 = Math.max(x0 + 1, Math.min(image.getWidth(), Math.ceil(((easting + halfW) - bw) / (be - bw) * image.getWidth())));
     const yTop = Math.floor(((bn - northing - halfW) - bs) / (bn - bs) * image.getHeight());
@@ -138,7 +139,24 @@ async function computeRealNdwi(bbox, cityLabel, dateStr) {
     return rasters[0];
   };
 
-  const [green, nir] = await Promise.all([readBand(greenHref), readBand(nirHref)]);
+  let windowHalfM = null;
+  const readBandWithSize = async (href) => {
+    const rasters = await readBand(href, (halfW) => { windowHalfM = halfW; });
+    return rasters;
+  };
+  const [green, nir] = await Promise.all([readBandWithSize(greenHref), readBandWithSize(nirHref)]);
+
+  // Geographic footprint of the analyzed window (± halfW meters around the city
+  // center) — lets the UI paint this exact NDWI raster back onto the main map.
+  const halfM = windowHalfM || 3000;
+  const degPerMLat = 1 / 110540;
+  const degPerMLon = 1 / (111320 * Math.cos(centerLat * Math.PI / 180));
+  const windowBbox = [
+    +(centerLon - halfM * degPerMLon).toFixed(5),
+    +(centerLat - halfM * degPerMLat).toFixed(5),
+    +(centerLon + halfM * degPerMLon).toFixed(5),
+    +(centerLat + halfM * degPerMLat).toFixed(5)
+  ];
 
   // 3. TRUE McFeeters NDWI = (Green - NIR) / (Green + NIR)
   const canvas = document.createElement('canvas');
@@ -189,6 +207,7 @@ async function computeRealNdwi(bbox, cityLabel, dateStr) {
       sensor: `Sentinel-2 MSI · ${Math.round(cloudPct)}% cloud`,
       url: canvas.toDataURL('image/png'),
       raw: true,
+      bbox: windowBbox,
       annotations: [
         { label: `Water pixels: ${((waterCount / (SIZE * SIZE)) * 100).toFixed(1)}% of sector`, box: [SIZE * 0.08, SIZE * 0.08, SIZE * 0.92, SIZE * 0.92], pct: ((waterCount / (SIZE * SIZE)) * 100).toFixed(1) }
       ]
@@ -232,6 +251,7 @@ async function _resolve(bbox, city, state, dateStr) {
     band: 'True Color RGB',
     sensor: 'VIIRS SNPP / NASA GIBS',
     url: gibsUrl('VIIRS_SNPP_CorrectedReflectance_TrueColor', bbox, dateStr),
+    bbox,
     annotations: []
   });
 
@@ -242,6 +262,7 @@ async function _resolve(bbox, city, state, dateStr) {
     band: 'SWIR False Color',
     sensor: 'MODIS Terra / NASA GIBS',
     url: gibsUrl('MODIS_Terra_CorrectedReflectance_Bands721', bbox, dateStr),
+    bbox,
     annotations: []
   });
 
@@ -252,7 +273,8 @@ async function _resolve(bbox, city, state, dateStr) {
     band: 'NDWI',
     sensor: 'Sentinel-2 MSI',
     url: '',
-    pending: true
+    pending: true,
+    bbox
   });
 
   // Frame 4: High-res optical closeup (Esri)
@@ -262,6 +284,7 @@ async function _resolve(bbox, city, state, dateStr) {
     band: 'True Color RGB',
     sensor: 'Esri World Imagery',
     url: esriOpticalUrl(bbox),
+    bbox,
     annotations: []
   });
 
@@ -279,6 +302,7 @@ async function _resolve(bbox, city, state, dateStr) {
       band: 'Approximated NDWI',
       sensor: 'Fallback mode',
       url: esriOpticalUrl(bbox),
+      bbox,
       annotations: []
     };
   }

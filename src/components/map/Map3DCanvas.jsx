@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
-import { Compass, Layers, MapPin } from 'lucide-react';
+import { Compass, Layers, MapPin, X, Eye, EyeOff } from 'lucide-react';
 import { boundarySlug } from '../../data/cities';
 import { stitchOuterRings } from '../../utils/geometry';
 
@@ -94,8 +94,7 @@ export function getStateColors(stateName) {
 }
 
 /* ---- session cache: survives page reloads, protects APIs from hammering ---- */
-// v3: invalidates polygons cached before district-precise relation scoring
-const CACHE_PREFIX = 'drishti_boundary_v3_';
+const CACHE_PREFIX = 'goat_boundary_v1_';
 function cacheGet(key) {
   try {
     const raw = sessionStorage.getItem(`${CACHE_PREFIX}${key}`);
@@ -106,21 +105,8 @@ function cacheSet(key, geojson) {
   try { sessionStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(geojson)); } catch {}
 }
 
-/* ---- light ring decimation keeps rendering buttery-smooth on huge borders ---- */
-function decimateRing(ring, maxPts = 2400) {
-  if (!ring || !Array.isArray(ring) || ring.length <= maxPts) return ring;
-  const step = Math.ceil(ring.length / maxPts);
-  const out = ring.filter((_, i) => i % step === 0);
-  if (out.length > 1 && (out[0][0] !== out[out.length - 1][0] || out[0][1] !== out[out.length - 1][1])) {
-    out.push(out[0]);
-  }
-  return out;
-}
+/* ---- Retain 100% full coordinate fidelity matching basemap district borders ---- */
 function decimateGeojson(g) {
-  // NOTE: never pass decimateRing directly to .map — the index arg would
-  // become maxPts and collapse every ring to a single point!
-  if (g.type === 'Polygon') return { ...g, coordinates: g.coordinates.map(r => decimateRing(r)) };
-  if (g.type === 'MultiPolygon') return { ...g, coordinates: g.coordinates.map(p => p.map(r => decimateRing(r))) };
   return g;
 }
 
@@ -288,7 +274,9 @@ export default function Map3DCanvas({
   setIsSatellite,
   isMinimized,
   isIntro,
-  onGetStarted
+  onGetStarted,
+  mapCommand,
+  fitPadding
 }) {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
@@ -296,7 +284,119 @@ export default function Map3DCanvas({
   const isFirstFlightRef = useRef(true);
   const savedGeojsonRef = useRef(null);
   const prevSatelliteRef = useRef(isSatellite);
+  const overlaysRef = useRef(new Map()); // id -> {sourceId, layerId, title, opacity}
+  const markersRef = useRef([]);
+  const [activeOverlays, setActiveOverlays] = useState([]);
   const [cityNameLabel, setCityNameLabel] = useState('');
+
+  /* ---------------- Chat → Map command bridge ---------------- */
+  // Runs fn once the style is ready (commands can arrive before/after load).
+  const runWhenReady = (fn) => {
+    const map = mapRef.current;
+    if (!map) return;
+    let tries = 50;
+    const tryNow = () => {
+      if (!mapRef.current) return;
+      if (map.isStyleLoaded()) { fn(map); return; }
+      if (tries-- > 0) setTimeout(tryNow, 200);
+    };
+    tryNow();
+  };
+
+  const applyImageOverlay = (map, { id, url, bounds, title, opacity = 0.82 }) => {
+    if (!url || !Array.isArray(bounds) || bounds.length !== 4) return;
+    const sourceId = `img-overlay-${id}`;
+    const layerId = `${sourceId}-layer`;
+    try {
+      if (map.getLayer(layerId)) map.removeLayer(layerId);
+      if (map.getSource(sourceId)) map.removeSource(sourceId);
+      const [w, s, e, n] = bounds;
+      map.addSource(sourceId, {
+        type: 'image',
+        url,
+        coordinates: [[w, n], [e, n], [e, s], [w, s]]
+      });
+      map.addLayer({
+        id: layerId,
+        type: 'raster',
+        source: sourceId,
+        paint: { 'raster-opacity': opacity, 'raster-fade-duration': 150 }
+      });
+      overlaysRef.current.set(id, { sourceId, layerId, title: title || id, opacity });
+      setActiveOverlays(Array.from(overlaysRef.current.entries()).map(([oid, o]) => ({ id: oid, ...o })));
+    } catch (err) {
+      console.warn('Overlay application failed:', err);
+    }
+  };
+
+  const removeImageOverlay = (map, id) => {
+    const entry = overlaysRef.current.get(id);
+    if (!entry) return;
+    try {
+      if (map.getLayer(entry.layerId)) map.removeLayer(entry.layerId);
+      if (map.getSource(entry.sourceId)) map.removeSource(entry.sourceId);
+    } catch {}
+    overlaysRef.current.delete(id);
+    setActiveOverlays(Array.from(overlaysRef.current.entries()).map(([oid, o]) => ({ id: oid, ...o })));
+  };
+
+  const setOverlayOpacityById = (map, id, opacity) => {
+    const entry = overlaysRef.current.get(id);
+    if (!entry) return;
+    try { map.setPaintProperty(entry.layerId, 'raster-opacity', opacity); } catch {}
+    entry.opacity = opacity;
+    setActiveOverlays(Array.from(overlaysRef.current.entries()).map(([oid, o]) => ({ id: oid, ...o })));
+  };
+
+  const clearAllMarkers = () => {
+    markersRef.current.forEach(m => { try { m.remove(); } catch {} });
+    markersRef.current = [];
+  };
+
+  useEffect(() => {
+    if (!mapCommand) return;
+    const { type, payload } = mapCommand;
+
+    switch (type) {
+      case 'flyTo':
+        runWhenReady(map => map.flyTo({
+          center: payload.center,
+          zoom: payload.zoom ?? 10.8,
+          pitch: payload.pitch ?? 45,
+          bearing: payload.bearing ?? -12,
+          duration: payload.duration ?? 1600,
+          essential: true
+        }));
+        break;
+
+      case 'clearOverlays':
+        runWhenReady(map => Array.from(overlaysRef.current.keys()).forEach(id => removeImageOverlay(map, id)));
+        clearAllMarkers();
+        break;
+
+      case 'pulseBoundary':
+        runWhenReady(map => {
+          const layerId = 'city-boundary-fill-layer';
+          if (!map.getLayer(layerId)) return;
+          let i = 0;
+          const iv = setInterval(() => {
+            i += 1;
+            try {
+              map.setPaintProperty(layerId, 'fill-opacity', i % 2 === 1 ? 0.68 : 0.22);
+              if (i >= 6) {
+                clearInterval(iv);
+                map.setPaintProperty(layerId, 'fill-opacity', 0.35);
+              }
+            } catch {}
+          }, 260);
+        });
+        break;
+
+      default:
+        break;
+    }
+  }, [mapCommand]);
+  /* ------------------------------------------------------------- */
 
   // Compute geographic bbox from any GeoJSON Polygon / MultiPolygon
   const geojsonBbox = (geometry) => {
@@ -461,10 +561,17 @@ export default function Map3DCanvas({
       const applyAndFit = () => {
         if (cancelled || !mapRef.current) return;
         applyBoundaryLayers(mapRef.current, geojson, cityName, getStateColors(stateName));
-        // Refine camera to the EXACT polygon bbox (fast, smooth — no second long flight)
+        // Refine camera to the EXACT polygon bbox (fast, smooth — no second long flight).
+        // Padding adapts to whichever side panels are open so the city stays centered
+        // in the visible map area between them.
         if (!isMinimized) {
           mapRef.current.fitBounds(geojsonBbox(geojson), {
-            padding: { top: 110, bottom: 150, left: 560, right: 130 },
+            padding: {
+              top: 110,
+              bottom: 150,
+              left: (fitPadding && fitPadding.left) || 60,
+              right: (fitPadding && fitPadding.right) || 80
+            },
             pitch: 40,
             bearing: -12,
             duration: 900,
@@ -487,6 +594,28 @@ export default function Map3DCanvas({
 
     return () => { cancelled = true; };
   }, [selectedCity, selectedState, isIntro]);
+
+  // Re-fit camera when side panels toggle so the city re-centers in the free space
+  useEffect(() => {
+    const map = mapRef.current;
+    const gj = savedGeojsonRef.current;
+    if (!map || !gj || isIntro || isMinimized) return;
+    map.fitBounds(geojsonBbox(gj), {
+      padding: {
+        top: 110,
+        bottom: 150,
+        left: (fitPadding && fitPadding.left) || 60,
+        right: (fitPadding && fitPadding.right) || 80
+      },
+      pitch: 40,
+      bearing: -12,
+      duration: 700,
+      essential: true,
+      curve: 1.42,
+      maxZoom: 11.5
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fitPadding && fitPadding.left, fitPadding && fitPadding.right]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -521,6 +650,54 @@ export default function Map3DCanvas({
               {cityNameLabel}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Active Overlay Chips — visibility & removal for chat-dispatched layers */}
+      {!isIntro && !isMinimized && activeOverlays.length > 0 && (
+        <div style={{
+          position: 'absolute',
+          bottom: 20,
+          right: 20,
+          zIndex: 29,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 6,
+          alignItems: 'flex-end'
+        }}>
+          {activeOverlays.map(ov => (
+            <div key={ov.id} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              backgroundColor: 'rgba(24, 24, 27, 0.94)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              borderRadius: 8,
+              padding: '5px 8px 5px 12px',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.55)'
+            }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: '#e2e8f0', maxWidth: 190, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {ov.title}
+              </span>
+              <button
+                onClick={() => runWhenReady(map => setOverlayOpacityById(map, ov.id, ov.opacity > 0.15 ? 0.08 : 0.82))}
+                title={ov.opacity > 0.15 ? 'Hide overlay' : 'Show overlay'}
+                style={{ background: 'none', border: 'none', color: ov.opacity > 0.15 ? '#38bdf8' : '#71717a', cursor: 'pointer', padding: 2, display: 'flex' }}
+              >
+                {ov.opacity > 0.15 ? <Eye size={13} /> : <EyeOff size={13} />}
+              </button>
+              <button
+                onClick={() => runWhenReady(map => removeImageOverlay(map, ov.id))}
+                title="Remove overlay"
+                style={{ background: 'none', border: 'none', color: '#a1a1aa', cursor: 'pointer', padding: 2, display: 'flex' }}
+              >
+                <X size={13} />
+              </button>
+            </div>
+          ))}
+          {/* spacer so chips never collide with the HUD buttons below */}
+          <div style={{ height: 84 }} />
         </div>
       )}
 

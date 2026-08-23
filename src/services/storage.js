@@ -80,6 +80,27 @@ export const saveStoredConversation = async (conv) => {
   } catch (err) {}
 };
 
+export const deleteStoredConversation = async (convId) => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.CONVERSATIONS);
+    if (raw) {
+      const convs = JSON.parse(raw).filter(c => c.id !== convId);
+      localStorage.setItem(STORAGE_KEYS.CONVERSATIONS, JSON.stringify(convs));
+    }
+    localStorage.removeItem(`${STORAGE_KEYS.MESSAGES}${convId}`);
+  } catch (err) {}
+};
+
+export const updateStoredConversationTitle = async (convId, newTitle) => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.CONVERSATIONS);
+    if (raw) {
+      const convs = JSON.parse(raw).map(c => c.id === convId ? { ...c, title: newTitle } : c);
+      localStorage.setItem(STORAGE_KEYS.CONVERSATIONS, JSON.stringify(convs));
+    }
+  } catch (err) {}
+};
+
 export const getStoredMessages = async (conversationId) => {
   // Try PocketBase
   try {

@@ -106,11 +106,11 @@ export default function DonutChartCard({ data }) {
                 border: `1px solid ${item.fill}30`
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: item.fill, boxShadow: `0 0 8px ${item.fill}` }} />
-                <span style={{ fontSize: 11, color: '#e2e8f0', fontWeight: 600 }}>{item.name}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: item.fill, boxShadow: `0 0 8px ${item.fill}`, flexShrink: 0 }} />
+                <span style={{ fontSize: 11, color: '#e2e8f0', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</span>
               </div>
-              <span style={{ fontSize: 12, fontWeight: 800, color: item.fill }}>{item.value}%</span>
+              <span style={{ fontSize: 12, fontWeight: 800, color: item.fill, marginLeft: 8, flexShrink: 0 }}>{item.value}%</span>
             </div>
           ))}
         </div>
