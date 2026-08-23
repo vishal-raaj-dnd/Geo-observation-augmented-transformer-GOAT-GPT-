@@ -1,0 +1,40 @@
+model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
+stage: sft
+do_train: true
+
+finetuning_type: lora
+lora_rank: 32
+lora_alpha: 64
+lora_dropout: 0.05
+lora_target: all
+freeze_vision_tower: true
+freeze_multi_modal_projector: true
+
+dataset: eo_flood
+dataset_dir: data
+template: qwen2_vl
+cutoff_len: 1024
+image_max_pixels: 262144
+preprocessing_num_workers: 4
+
+output_dir: saves/eo-lora
+logging_steps: 10
+save_steps: 200
+plot_loss: true
+
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+
+fp16: true
+bf16: false
+gradient_checkpointing: true
+report_to: none
+
+val_size: 0.1
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 200

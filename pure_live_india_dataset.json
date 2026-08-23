@@ -1,0 +1,407 @@
+[
+  {
+    "id": "LIVE_INDIA_001",
+    "region": "North_Uttarakhand",
+    "acquisition_date": "2024-06-17",
+    "image": "patches/live_india_001_North_Uttarakhand.jpg",
+    "metrics": {
+      "mean_ndvi": 0.241,
+      "vegetation_pct": 31.6,
+      "water_pct": 7.22,
+      "exact_bbox": [
+        209980.0,
+        3484920.0,
+        215100.0,
+        3490040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over North_Uttarakhand BBOX [209980.0, 3484920.0, 215100.0, 3490040.0] acquired on 2024-06-17."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [209980.0, 3484920.0, 215100.0, 3490040.0]\n\nAnalysis: Sentinel-2 image for North_Uttarakhand acquired on 2024-06-17 yields a calculated mean NDVI of 0.241. Live pixel math reveals 31.6% vegetation cover and 7.22% surface water across bounds [209980.0, 3484920.0, 215100.0, 3490040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_002",
+    "region": "North_Himachal",
+    "acquisition_date": "2024-06-17",
+    "image": "patches/live_india_002_North_Himachal.jpg",
+    "metrics": {
+      "mean_ndvi": 0.362,
+      "vegetation_pct": 61.5,
+      "water_pct": 0.02,
+      "exact_bbox": [
+        709960.0,
+        3484920.0,
+        715080.0,
+        3490040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over North_Himachal BBOX [709960.0, 3484920.0, 715080.0, 3490040.0] acquired on 2024-06-17."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [709960.0, 3484920.0, 715080.0, 3490040.0]\n\nAnalysis: Sentinel-2 image for North_Himachal acquired on 2024-06-17 yields a calculated mean NDVI of 0.362. Live pixel math reveals 61.5% vegetation cover and 0.02% surface water across bounds [709960.0, 3484920.0, 715080.0, 3490040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_003",
+    "region": "Northeast_Assam",
+    "acquisition_date": "2024-07-26",
+    "image": "patches/live_india_003_Northeast_Assam.jpg",
+    "metrics": {
+      "mean_ndvi": 0.563,
+      "vegetation_pct": 96.55,
+      "water_pct": 0.09,
+      "exact_bbox": [
+        509980.0,
+        2984880.0,
+        515100.0,
+        2990000.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Northeast_Assam BBOX [509980.0, 2984880.0, 515100.0, 2990000.0] acquired on 2024-07-26."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [509980.0, 2984880.0, 515100.0, 2990000.0]\n\nAnalysis: Sentinel-2 image for Northeast_Assam acquired on 2024-07-26 yields a calculated mean NDVI of 0.563. Live pixel math reveals 96.55% vegetation cover and 0.09% surface water across bounds [509980.0, 2984880.0, 515100.0, 2990000.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_004",
+    "region": "Northeast_Meghalaya",
+    "acquisition_date": "2024-05-25",
+    "image": "patches/live_india_004_Northeast_Meghalaya.jpg",
+    "metrics": {
+      "mean_ndvi": 0.31,
+      "vegetation_pct": 37.48,
+      "water_pct": 0.54,
+      "exact_bbox": [
+        310000.0,
+        2884920.0,
+        315120.0,
+        2890040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Northeast_Meghalaya BBOX [310000.0, 2884920.0, 315120.0, 2890040.0] acquired on 2024-05-25."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [310000.0, 2884920.0, 315120.0, 2890040.0]\n\nAnalysis: Sentinel-2 image for Northeast_Meghalaya acquired on 2024-05-25 yields a calculated mean NDVI of 0.31. Live pixel math reveals 37.48% vegetation cover and 0.54% surface water across bounds [310000.0, 2884920.0, 315120.0, 2890040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_005",
+    "region": "Northwest_Punjab",
+    "acquisition_date": "2024-07-15",
+    "image": "patches/live_india_005_Northwest_Punjab.jpg",
+    "metrics": {
+      "mean_ndvi": 0.291,
+      "vegetation_pct": 34.7,
+      "water_pct": 1.65,
+      "exact_bbox": [
+        509980.0,
+        3484920.0,
+        515100.0,
+        3490040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Northwest_Punjab BBOX [509980.0, 3484920.0, 515100.0, 3490040.0] acquired on 2024-07-15."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [509980.0, 3484920.0, 515100.0, 3490040.0]\n\nAnalysis: Sentinel-2 image for Northwest_Punjab acquired on 2024-07-15 yields a calculated mean NDVI of 0.291. Live pixel math reveals 34.7% vegetation cover and 1.65% surface water across bounds [509980.0, 3484920.0, 515100.0, 3490040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_006",
+    "region": "East_Bihar",
+    "acquisition_date": "2024-06-15",
+    "image": "patches/live_india_006_East_Bihar.jpg",
+    "metrics": {
+      "mean_ndvi": -1.0,
+      "vegetation_pct": 0.0,
+      "water_pct": 100.0,
+      "exact_bbox": [
+        209980.0,
+        2884920.0,
+        215100.0,
+        2890040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over East_Bihar BBOX [209980.0, 2884920.0, 215100.0, 2890040.0] acquired on 2024-06-15."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [209980.0, 2884920.0, 215100.0, 2890040.0]\n\nAnalysis: Sentinel-2 image for East_Bihar acquired on 2024-06-15 yields a calculated mean NDVI of -1.0. Live pixel math reveals 0.0% vegetation cover and 100.0% surface water across bounds [209980.0, 2884920.0, 215100.0, 2890040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_007",
+    "region": "East_WestBengal",
+    "acquisition_date": "2024-05-18",
+    "image": "patches/live_india_007_East_WestBengal.jpg",
+    "metrics": {
+      "mean_ndvi": 0.077,
+      "vegetation_pct": 0.06,
+      "water_pct": 0.85,
+      "exact_bbox": [
+        709960.0,
+        2484900.0,
+        715080.0,
+        2490020.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over East_WestBengal BBOX [709960.0, 2484900.0, 715080.0, 2490020.0] acquired on 2024-05-18."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [709960.0, 2484900.0, 715080.0, 2490020.0]\n\nAnalysis: Sentinel-2 image for East_WestBengal acquired on 2024-05-18 yields a calculated mean NDVI of 0.077. Live pixel math reveals 0.06% vegetation cover and 0.85% surface water across bounds [709960.0, 2484900.0, 715080.0, 2490020.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_008",
+    "region": "West_Rajasthan",
+    "acquisition_date": "2024-07-28",
+    "image": "patches/live_india_008_West_Rajasthan.jpg",
+    "metrics": {
+      "mean_ndvi": -1.0,
+      "vegetation_pct": 0.0,
+      "water_pct": 100.0,
+      "exact_bbox": [
+        610000.0,
+        3084900.0,
+        615120.0,
+        3090020.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over West_Rajasthan BBOX [610000.0, 3084900.0, 615120.0, 3090020.0] acquired on 2024-07-28."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [610000.0, 3084900.0, 615120.0, 3090020.0]\n\nAnalysis: Sentinel-2 image for West_Rajasthan acquired on 2024-07-28 yields a calculated mean NDVI of -1.0. Live pixel math reveals 0.0% vegetation cover and 100.0% surface water across bounds [610000.0, 3084900.0, 615120.0, 3090020.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_009",
+    "region": "West_Gujarat",
+    "acquisition_date": "2024-06-23",
+    "image": "patches/live_india_009_West_Gujarat.jpg",
+    "metrics": {
+      "mean_ndvi": -1.0,
+      "vegetation_pct": 0.0,
+      "water_pct": 100.0,
+      "exact_bbox": [
+        509980.0,
+        2684880.0,
+        515100.0,
+        2690000.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over West_Gujarat BBOX [509980.0, 2684880.0, 515100.0, 2690000.0] acquired on 2024-06-23."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [509980.0, 2684880.0, 515100.0, 2690000.0]\n\nAnalysis: Sentinel-2 image for West_Gujarat acquired on 2024-06-23 yields a calculated mean NDVI of -1.0. Live pixel math reveals 0.0% vegetation cover and 100.0% surface water across bounds [509980.0, 2684880.0, 515100.0, 2690000.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_010",
+    "region": "Central_MadhyaPradesh",
+    "acquisition_date": "2024-06-09",
+    "image": "patches/live_india_010_Central_MadhyaPradesh.jpg",
+    "metrics": {
+      "mean_ndvi": 0.096,
+      "vegetation_pct": 0.47,
+      "water_pct": 0.02,
+      "exact_bbox": [
+        709960.0,
+        2584920.0,
+        715080.0,
+        2590040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Central_MadhyaPradesh BBOX [709960.0, 2584920.0, 715080.0, 2590040.0] acquired on 2024-06-09."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [709960.0, 2584920.0, 715080.0, 2590040.0]\n\nAnalysis: Sentinel-2 image for Central_MadhyaPradesh acquired on 2024-06-09 yields a calculated mean NDVI of 0.096. Live pixel math reveals 0.47% vegetation cover and 0.02% surface water across bounds [709960.0, 2584920.0, 715080.0, 2590040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_011",
+    "region": "Central_Maharashtra",
+    "acquisition_date": "2024-05-30",
+    "image": "patches/live_india_011_Central_Maharashtra.jpg",
+    "metrics": {
+      "mean_ndvi": 0.11,
+      "vegetation_pct": 1.76,
+      "water_pct": 0.03,
+      "exact_bbox": [
+        610000.0,
+        1984920.0,
+        615120.0,
+        1990040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Central_Maharashtra BBOX [610000.0, 1984920.0, 615120.0, 1990040.0] acquired on 2024-05-30."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [610000.0, 1984920.0, 615120.0, 1990040.0]\n\nAnalysis: Sentinel-2 image for Central_Maharashtra acquired on 2024-05-30 yields a calculated mean NDVI of 0.11. Live pixel math reveals 1.76% vegetation cover and 0.03% surface water across bounds [610000.0, 1984920.0, 615120.0, 1990040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_012",
+    "region": "Southwest_Kerala",
+    "acquisition_date": "2024-05-05",
+    "image": "patches/live_india_012_Southwest_Kerala.jpg",
+    "metrics": {
+      "mean_ndvi": 0.203,
+      "vegetation_pct": 11.95,
+      "water_pct": 0.41,
+      "exact_bbox": [
+        610000.0,
+        1384920.0,
+        615120.0,
+        1390040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Southwest_Kerala BBOX [610000.0, 1384920.0, 615120.0, 1390040.0] acquired on 2024-05-05."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [610000.0, 1384920.0, 615120.0, 1390040.0]\n\nAnalysis: Sentinel-2 image for Southwest_Kerala acquired on 2024-05-05 yields a calculated mean NDVI of 0.203. Live pixel math reveals 11.95% vegetation cover and 0.41% surface water across bounds [610000.0, 1384920.0, 615120.0, 1390040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_013",
+    "region": "Southwest_Karnataka",
+    "acquisition_date": "2024-04-10",
+    "image": "patches/live_india_013_Southwest_Karnataka.jpg",
+    "metrics": {
+      "mean_ndvi": 0.405,
+      "vegetation_pct": 72.01,
+      "water_pct": 0.0,
+      "exact_bbox": [
+        509980.0,
+        1384920.0,
+        515100.0,
+        1390040.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Southwest_Karnataka BBOX [509980.0, 1384920.0, 515100.0, 1390040.0] acquired on 2024-04-10."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [509980.0, 1384920.0, 515100.0, 1390040.0]\n\nAnalysis: Sentinel-2 image for Southwest_Karnataka acquired on 2024-04-10 yields a calculated mean NDVI of 0.405. Live pixel math reveals 72.01% vegetation cover and 0.0% surface water across bounds [509980.0, 1384920.0, 515100.0, 1390040.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_014",
+    "region": "Southeast_TamilNadu",
+    "acquisition_date": "2024-04-19",
+    "image": "patches/live_india_014_Southeast_TamilNadu.jpg",
+    "metrics": {
+      "mean_ndvi": 0.207,
+      "vegetation_pct": 10.05,
+      "water_pct": 1.42,
+      "exact_bbox": [
+        310000.0,
+        1284900.0,
+        315120.0,
+        1290020.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Southeast_TamilNadu BBOX [310000.0, 1284900.0, 315120.0, 1290020.0] acquired on 2024-04-19."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [310000.0, 1284900.0, 315120.0, 1290020.0]\n\nAnalysis: Sentinel-2 image for Southeast_TamilNadu acquired on 2024-04-19 yields a calculated mean NDVI of 0.207. Live pixel math reveals 10.05% vegetation cover and 1.42% surface water across bounds [310000.0, 1284900.0, 315120.0, 1290020.0]."
+      }
+    ]
+  },
+  {
+    "id": "LIVE_INDIA_015",
+    "region": "Southeast_AndhraPradesh",
+    "acquisition_date": "2024-06-18",
+    "image": "patches/live_india_015_Southeast_AndhraPradesh.jpg",
+    "metrics": {
+      "mean_ndvi": -1.0,
+      "vegetation_pct": 0.0,
+      "water_pct": 100.0,
+      "exact_bbox": [
+        409960.0,
+        1884900.0,
+        415080.0,
+        1890020.0
+      ]
+    },
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nPerform multi-spectral analysis on Sentinel-2 satellite tile over Southeast_AndhraPradesh BBOX [409960.0, 1884900.0, 415080.0, 1890020.0] acquired on 2024-06-18."
+      },
+      {
+        "from": "gpt",
+        "value": "Tool: calculate_ndvi | BBOX: [409960.0, 1884900.0, 415080.0, 1890020.0]\n\nAnalysis: Sentinel-2 image for Southeast_AndhraPradesh acquired on 2024-06-18 yields a calculated mean NDVI of -1.0. Live pixel math reveals 0.0% vegetation cover and 100.0% surface water across bounds [409960.0, 1884900.0, 415080.0, 1890020.0]."
+      }
+    ]
+  }
+]

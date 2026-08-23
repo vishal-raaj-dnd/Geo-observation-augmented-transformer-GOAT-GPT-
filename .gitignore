@@ -1,0 +1,27 @@
+# dependencies / build
+node_modules/
+dist/
+__pycache__/
+*.pyc
+
+# vite temp files
+vite.config.js.timestamp-*
+
+# large non-app media (screen recordings)
+Recording*.mp4
+Screen Recording*.mp4
+Earth_globe_rotating_in_space_202608201227.mp4
+
+# archives
+*.zip
+
+# model checkpoints (too large for GitHub — host separately, e.g. HuggingFace / releases)
+eo_gpt_universal_adapter/
+new_adapter/
+
+# local backend binary + database
+pocketbase/
+
+# build tooling caches / logs
+scripts/.cache/
+boundary_build_log.txt

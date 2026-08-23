@@ -1,0 +1,256 @@
+/* DRISHTI Earth Observation - Core Design System & Tokens */
+:root {
+  --bg-base: #09090b;
+  --bg-card: #18181b;
+  --bg-card-hover: #27272a;
+  --bg-input: #121215;
+  --border-subtle: #27272a;
+  --border-focus: #3f3f46;
+  
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  
+  --btn-primary-bg: #f4f4f5;
+  --btn-primary-text: #09090b;
+  --btn-primary-hover: #e4e4e7;
+  
+  --btn-secondary-bg: #18181b;
+  --btn-secondary-border: #27272a;
+  --btn-secondary-text: #fafafa;
+  --btn-secondary-hover: #27272a;
+  
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-focus);
+}
+
+/* Base UI Components (shadcn/ui style matching reference image) */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  font-weight: 500;
+  font-size: 13px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--btn-secondary-border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.btn-secondary:hover {
+  background-color: var(--btn-secondary-hover);
+  border-color: var(--border-focus);
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px 14px;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+.input-field:focus {
+  border-color: var(--border-focus);
+}
+.input-field::placeholder {
+  color: var(--text-secondary);
+}
+
+select.input-field {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+select.input-field option {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  padding: 10px;
+}
+
+
+.card-container {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+/* Pulsing City Marker Radar Circles */
+.pulsing-radar-marker {
+  width: 16px;
+  height: 16px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+}
+.pulsing-radar-marker::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Shared Animations (used across App, Sidebar, Chat) */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Revolving-dot pre-loader (intro video buffering state) */
+.intro-loader-dot {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  animation: spin 900ms linear infinite;
+}
+.intro-loader-dot::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #e4e4e7;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
+}
+
+/* Live streaming caret (AI response typing) */
+.stream-caret {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  margin-left: 3px;
+  vertical-align: -2px;
+  background-color: #38bdf8;
+  border-radius: 2px;
+  animation: caret-blink 900ms ease-in-out infinite;
+}
+@keyframes caret-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+
+/* Hide MapLibre attribution & logo controls */
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-attrib-container,
+.maplibregl-ctrl-logo,
+.maplibregl-ctrl-bottom-right,
+.maplibregl-ctrl-bottom-left {
+  display: none !important;
+}

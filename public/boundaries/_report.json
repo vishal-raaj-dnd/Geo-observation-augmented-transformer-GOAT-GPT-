@@ -1,0 +1,643 @@
+[
+  {
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "ok": true,
+    "districts": [
+      "Chennai"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Coimbatore",
+    "state": "Tamil Nadu",
+    "ok": true,
+    "districts": [
+      "Coimbatore"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Madurai",
+    "state": "Tamil Nadu",
+    "ok": true,
+    "districts": [
+      "Madurai"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Tiruchirappalli",
+    "state": "Tamil Nadu",
+    "ok": true,
+    "districts": [
+      "Tiruchirappalli"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Salem",
+    "state": "Tamil Nadu",
+    "ok": true,
+    "districts": [
+      "Salem"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Cuddalore",
+    "state": "Tamil Nadu",
+    "ok": true,
+    "districts": [
+      "Cuddalore"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Alappuzha",
+    "state": "Kerala",
+    "ok": true,
+    "districts": [
+      "Alappuzha"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Kochi",
+    "state": "Kerala",
+    "ok": true,
+    "districts": [
+      "Ernakulam"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Kozhikode",
+    "state": "Kerala",
+    "ok": true,
+    "districts": [
+      "Kozhikode"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Thrissur",
+    "state": "Kerala",
+    "ok": true,
+    "districts": [
+      "Thrissur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Kollam",
+    "state": "Kerala",
+    "ok": true,
+    "districts": [
+      "Kollam"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "ok": true,
+    "districts": [
+      "Mumbai",
+      "Mumbai Suburban"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Pune",
+    "state": "Maharashtra",
+    "ok": true,
+    "districts": [
+      "Pune"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Nashik",
+    "state": "Maharashtra",
+    "ok": true,
+    "districts": [
+      "Nashik"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Nagpur",
+    "state": "Maharashtra",
+    "ok": true,
+    "districts": [
+      "Nagpur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Kolhapur",
+    "state": "Maharashtra",
+    "ok": true,
+    "districts": [
+      "Kolhapur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "ok": true,
+    "districts": [
+      "Kolkata"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Howrah",
+    "state": "West Bengal",
+    "ok": true,
+    "districts": [
+      "Haora"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Durgapur",
+    "state": "West Bengal",
+    "ok": true,
+    "districts": [
+      "Paschim Barddhaman"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Siliguri",
+    "state": "West Bengal",
+    "ok": true,
+    "districts": [
+      "Darjiling"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Patna",
+    "state": "Bihar",
+    "ok": true,
+    "districts": [
+      "Patna"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Bhagalpur",
+    "state": "Bihar",
+    "ok": true,
+    "districts": [
+      "Bhagalpur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Muzaffarpur",
+    "state": "Bihar",
+    "ok": true,
+    "districts": [
+      "Muzaffarpur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Gaya",
+    "state": "Bihar",
+    "ok": true,
+    "districts": [
+      "Gaya"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Darbhanga",
+    "state": "Bihar",
+    "ok": true,
+    "districts": [
+      "Darbhanga"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "ok": true,
+    "districts": [
+      "Bangalore"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Mysuru",
+    "state": "Karnataka",
+    "ok": true,
+    "districts": [
+      "Mysore"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Mangaluru",
+    "state": "Karnataka",
+    "ok": true,
+    "districts": [
+      "Dakshina Kannada"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Belagavi",
+    "state": "Karnataka",
+    "ok": true,
+    "districts": [
+      "Belgaum"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Guwahati",
+    "state": "Assam",
+    "ok": true,
+    "districts": [
+      "Kamrup Metropolitan"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Dibrugarh",
+    "state": "Assam",
+    "ok": true,
+    "districts": [
+      "Dibrugarh"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Silchar",
+    "state": "Assam",
+    "ok": true,
+    "districts": [
+      "Cachar"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Jorhat",
+    "state": "Assam",
+    "ok": true,
+    "districts": [
+      "Jorhat"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Cuttack",
+    "state": "Odisha",
+    "ok": true,
+    "districts": [
+      "Cuttack"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Bhubaneswar",
+    "state": "Odisha",
+    "ok": true,
+    "districts": [
+      "Khordha"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Puri",
+    "state": "Odisha",
+    "ok": true,
+    "districts": [
+      "Puri"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Sambalpur",
+    "state": "Odisha",
+    "ok": true,
+    "districts": [
+      "Sambalpur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Ludhiana",
+    "state": "Punjab",
+    "ok": true,
+    "districts": [
+      "Ludhiana"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Amritsar",
+    "state": "Punjab",
+    "ok": true,
+    "districts": [
+      "Amritsar"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Jalandhar",
+    "state": "Punjab",
+    "ok": true,
+    "districts": [
+      "Jalandhar"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Patiala",
+    "state": "Punjab",
+    "ok": true,
+    "districts": [
+      "Patiala"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Lucknow",
+    "state": "Uttar Pradesh",
+    "ok": true,
+    "districts": [
+      "Lucknow"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Varanasi",
+    "state": "Uttar Pradesh",
+    "ok": true,
+    "districts": [
+      "Varanasi"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Prayagraj",
+    "state": "Uttar Pradesh",
+    "ok": true,
+    "districts": [
+      "Allahabad"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Kanpur",
+    "state": "Uttar Pradesh",
+    "ok": true,
+    "districts": [
+      "Kanpur Nagar"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Gorakhpur",
+    "state": "Uttar Pradesh",
+    "ok": true,
+    "districts": [
+      "Gorakhpur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Visakhapatnam",
+    "state": "Andhra Pradesh",
+    "ok": true,
+    "districts": [
+      "Visakhapatnam"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Vijayawada",
+    "state": "Andhra Pradesh",
+    "ok": true,
+    "districts": [
+      "Krishna"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Guntur",
+    "state": "Andhra Pradesh",
+    "ok": true,
+    "districts": [
+      "Guntur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Kurnool",
+    "state": "Andhra Pradesh",
+    "ok": true,
+    "districts": [
+      "Kurnool"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Hyderabad",
+    "state": "Telangana",
+    "ok": true,
+    "districts": [
+      "Hydrabad"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Warangal",
+    "state": "Telangana",
+    "ok": true,
+    "districts": [
+      "Warangal (U)",
+      "Warangal (R)"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Nizamabad",
+    "state": "Telangana",
+    "ok": true,
+    "districts": [
+      "Nizamabad"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "ok": true,
+    "districts": [
+      "Ahmadabad"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Surat",
+    "state": "Gujarat",
+    "ok": true,
+    "districts": [
+      "Surat"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Vadodara",
+    "state": "Gujarat",
+    "ok": true,
+    "districts": [
+      "Vadodara"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Rajkot",
+    "state": "Gujarat",
+    "ok": true,
+    "districts": [
+      "Rajkot"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "ok": true,
+    "districts": [
+      "Jaipur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Jodhpur",
+    "state": "Rajasthan",
+    "ok": true,
+    "districts": [
+      "Jodhpur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Udaipur",
+    "state": "Rajasthan",
+    "ok": true,
+    "districts": [
+      "Udaipur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Kota",
+    "state": "Rajasthan",
+    "ok": true,
+    "districts": [
+      "Kota"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "ok": true,
+    "districts": [
+      "Bhopal"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Indore",
+    "state": "Madhya Pradesh",
+    "ok": true,
+    "districts": [
+      "Indore"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Jabalpur",
+    "state": "Madhya Pradesh",
+    "ok": true,
+    "districts": [
+      "Jabalpur"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Gwalior",
+    "state": "Madhya Pradesh",
+    "ok": true,
+    "districts": [
+      "Gwalior"
+    ],
+    "flag": null
+  },
+  {
+    "city": "New Delhi",
+    "state": "Delhi",
+    "ok": true,
+    "districts": [
+      "New Delhi"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Srinagar",
+    "state": "Jammu and Kashmir",
+    "ok": true,
+    "districts": [
+      "Srinagar"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Jammu",
+    "state": "Jammu and Kashmir",
+    "ok": true,
+    "districts": [
+      "Jammu"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Dehradun",
+    "state": "Uttarakhand",
+    "ok": true,
+    "districts": [
+      "Dehradun"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Haridwar",
+    "state": "Uttarakhand",
+    "ok": true,
+    "districts": [
+      "Hardwar"
+    ],
+    "flag": null
+  },
+  {
+    "city": "Rishikesh",
+    "state": "Uttarakhand",
+    "ok": true,
+    "districts": [
+      "Dehradun"
+    ],
+    "flag": null
+  }
+]

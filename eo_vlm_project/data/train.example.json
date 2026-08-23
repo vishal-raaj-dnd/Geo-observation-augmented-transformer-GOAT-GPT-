@@ -1,0 +1,23 @@
+[
+  {
+    "messages": [
+      {"role": "user", "content": "<image>Analyze this satellite image of Patna, Bihar, September 2024."},
+      {"role": "assistant", "content": "Extensive inundation is visible along the river's southern bank, covering roughly 35% of the scene. Agricultural plots near the embankment are submerged and several road segments appear interrupted. Water extent is strongly anomalous compared to the September baseline of about 6%."}
+    ],
+    "images": ["patna_2024_09.png"]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "<image>Locate all flooded areas in this satellite image with bounding boxes."},
+      {"role": "assistant", "content": "<|object_ref_start|>flooded farmland<|object_ref_end|><|box_start|>(112,340),(489,602)<|box_end|>\n<|object_ref_start|>inundated riverbank<|object_ref_end|><|box_start|>(30,88),(512,210)<|box_end|>"}
+    ],
+    "images": ["patna_2024_09.png"]
+  },
+  {
+    "messages": [
+      {"role": "user", "content": "<image>Analyze the flooding in Jaipur, Rajasthan, March 2024."},
+      {"role": "assistant", "content": "Your premise is not supported by this imagery. Water bodies occupy only about 3% of the scene, consistent with the seasonal baseline of 4%. No inundation, standing water, or sediment plumes are detected in urban or peri-urban zones."}
+    ],
+    "images": ["jaipur_2024_03.png"]
+  }
+]

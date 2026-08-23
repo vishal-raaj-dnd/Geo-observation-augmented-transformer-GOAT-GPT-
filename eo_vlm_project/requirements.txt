@@ -1,0 +1,9 @@
+torch>=2.1
+transformers>=4.49.0
+accelerate>=0.34
+peft>=0.14
+qwen-vl-utils
+pillow
+opencv-python-headless
+gradio>=4.0
+llamafactory
