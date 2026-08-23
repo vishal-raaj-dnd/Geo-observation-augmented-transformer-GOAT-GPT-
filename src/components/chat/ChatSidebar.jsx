@@ -155,8 +155,14 @@ export default function ChatSidebar({
   ].filter(Boolean);
 
   const presetChips = [
-    '🌊 Real Flood Event: Evaluate Severe Flood Submergence in Bhagalpur',
-    '🛡️ False Alarm Test: Verify Claimed Flood in Dry Region (Trustworthiness Test)'
+    {
+      label: '🌊 Real Scenario: Severe Flood Event in Bhagalpur',
+      query: 'Evaluate Verified Severe Flood Submergence in Bhagalpur (August 2026)'
+    },
+    {
+      label: '🛡️ Trustworthiness Test: False Alarm in Dry Region Jodhpur',
+      query: 'Verify Claimed Flood Event in Dry Region Jodhpur (Engine Trustworthiness Test)'
+    }
   ];
 
   return (
@@ -432,26 +438,26 @@ export default function ChatSidebar({
         backgroundColor: 'rgba(19, 19, 22, 0.98)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, overflowX: 'auto', paddingBottom: 2 }}>
-          {presetChips.map((chipText, cIdx) => (
+          {presetChips.map((chip, cIdx) => (
             <button
               key={cIdx}
-              onClick={() => handleSend(chipText)}
+              onClick={() => handleSend(chip.query)}
               style={{
-                fontSize: 10,
+                fontSize: 10.5,
                 fontWeight: 600,
                 color: '#7dd3fc',
                 backgroundColor: 'rgba(24, 24, 27, 0.9)',
                 border: '1px solid rgba(56, 189, 248, 0.35)',
                 borderRadius: 16,
-                padding: '4px 11px',
+                padding: '5px 12px',
                 whiteSpace: 'nowrap',
                 cursor: 'pointer',
                 transition: 'all 150ms ease'
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(56, 189, 248, 0.12)'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(56, 189, 248, 0.16)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(24, 24, 27, 0.9)'; }}
             >
-              {chipText}
+              {chip.label}
             </button>
           ))}
         </div>
