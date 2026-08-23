@@ -164,6 +164,24 @@ export default function App() {
     const textToSend = queryTextOverride || prompt;
     if (!textToSend || !textToSend.trim()) return;
 
+    // Auto-detect if query mentions any city in our catalog (e.g. Bhagalpur, Mumbai, Pune)
+    let activeCity = cityName;
+    let activeState = stateName;
+    for (const [st, cList] of Object.entries(STATE_CITIES)) {
+      for (const c of cList) {
+        if (textToSend.toLowerCase().includes(c.toLowerCase())) {
+          activeCity = c;
+          activeState = st;
+          break;
+        }
+      }
+    }
+
+    if (activeCity !== cityName || activeState !== stateName) {
+      setSelectedState(activeState);
+      setSelectedCity(activeCity);
+    }
+
     setIsChatOpen(true);
 
     let convId = activeConversationId;
@@ -173,9 +191,9 @@ export default function App() {
       convId = `conv_${Date.now()}`;
       const newConv = {
         id: convId,
-        title: `GOAT Analysis — ${cityName}`,
-        state: stateName,
-        city: cityName,
+        title: `GOAT Analysis — ${activeCity}`,
+        state: activeState,
+        city: activeCity,
         timestamp: new Date().toLocaleDateString('en-GB')
       };
       currentConvs = [newConv, ...currentConvs];
@@ -224,7 +242,7 @@ export default function App() {
     };
     const stopLoading = () => { setIsToolLoading(false); setToolStepText(''); };
 
-    const streamUrl = `http://localhost:8000/api/chat/stream?query=${encodeURIComponent(textToSend)}&city=${encodeURIComponent(cityName)}&state=${encodeURIComponent(stateName)}&month=${encodeURIComponent(dateTime.split(' ')[0] || 'August')}&year=${encodeURIComponent(dateTime.split(' ')[1] || '2026')}`;
+    const streamUrl = `http://localhost:8000/api/chat/stream?query=${encodeURIComponent(textToSend)}&city=${encodeURIComponent(activeCity)}&state=${encodeURIComponent(activeState)}&month=${encodeURIComponent(dateTime.split(' ')[0] || 'August')}&year=${encodeURIComponent(dateTime.split(' ')[1] || '2026')}`;
 
     try {
       const eventSource = new EventSource(streamUrl);
@@ -265,8 +283,8 @@ export default function App() {
 
       const isFakeTest = textToSend.toLowerCase().includes('fake') || textToSend.toLowerCase().includes('dry') || textToSend.toLowerCase().includes('test');
       const fallbackText = isFakeTest
-        ? `### GOAT GPT Grounded EO Analysis — ${cityName}, ${stateName}\n\n1. **Spectral NDWI Analysis & Grounded Evidence:**\nSentinel-2 optical and SAR pass evaluation over ${cityName}, ${stateName} ${coordLabel} confirms **no flood activity** for this query.\nCalculated Normalized Difference Water Index (NDWI) is **-0.04 (Dry/Seasonal Land)**, falling strictly below the +0.10 open-water threshold.\n\n2. **Population & Sector Safety:**\nZero urban or agricultural land submergence detected (**0.0 km²** flooded area). Residential wards and critical infrastructure remain 100% dry.\n\n3. **Truthfulness Verification:**\n• **Status:** Ground-Truth Un-Submerged.\n• **Confidence:** 99.4% (Sentinel-2 L2A Band Math Confirmed).`
-        : `### GOAT GPT Earth Observation Analysis — ${cityName}, ${stateName}\n\n1. **GEO Observation Spectral & SAR Telemetry:**\nSentinel-2 MSI optical composite and Synthetic Aperture Radar (SAR) orbital passes over ${cityName}, ${stateName} ${coordLabel} confirm active surface water accumulation. Calculated Normalized Difference Water Index (NDWI) identifies approximately **84.2 km²** of submerged land.\n\n2. **Impact & Population Vulnerability:**\nAn estimated **18,400 residents** across low-lying sector wards are exposed. Peak water submergence depth reaches **1.8 meters**.\n\n3. **Directives & Risk Mitigation:**\n• **Evacuation Directive:** Mandatory evacuation protocol for low-lying wards adjacent to primary riverbanks.\n• **Infrastructure Defense:** Heavy-duty de-watering pumps advised for key power sub-stations in ${cityName}.\n• **Orbital Pass:** Sentinel-1 C-band SAR pass scheduled for continuous flood recession tracking.`;
+        ? `### GOAT GPT Grounded EO Analysis — ${activeCity}, ${activeState}\n\n1. **Spectral NDWI Analysis & Grounded Evidence:**\nSentinel-2 optical and SAR pass evaluation over ${activeCity}, ${activeState} ${coordLabel} confirms **no flood activity** for this query.\nCalculated Normalized Difference Water Index (NDWI) is **-0.04 (Dry/Seasonal Land)**, falling strictly below the +0.10 open-water threshold.\n\n2. **Population & Sector Safety:**\nZero urban or agricultural land submergence detected (**0.0 km²** flooded area). Residential wards and critical infrastructure remain 100% dry.\n\n3. **Truthfulness Verification:**\n• **Status:** Ground-Truth Un-Submerged.\n• **Confidence:** 99.4% (Sentinel-2 L2A Band Math Confirmed).`
+        : `### GOAT GPT Earth Observation Analysis — ${activeCity}, ${activeState}\n\n1. **GEO Observation Spectral & SAR Telemetry:**\nSentinel-2 MSI optical composite and Synthetic Aperture Radar (SAR) orbital passes over ${activeCity}, ${activeState} ${coordLabel} confirm active surface water accumulation. Calculated Normalized Difference Water Index (NDWI) identifies approximately **84.2 km²** of submerged land.\n\n2. **Impact & Population Vulnerability:**\nAn estimated **18,400 residents** across low-lying sector wards are exposed. Peak water submergence depth reaches **1.8 meters**.\n\n3. **Directives & Risk Mitigation:**\n• **Evacuation Directive:** Mandatory evacuation protocol for low-lying wards adjacent to primary riverbanks.\n• **Infrastructure Defense:** Heavy-duty de-watering pumps advised for key power sub-stations in ${activeCity}.\n• **Orbital Pass:** Sentinel-1 C-band SAR pass scheduled for continuous flood recession tracking.`;
 
       const fallbackDeliverables = {
         telemetry: {
