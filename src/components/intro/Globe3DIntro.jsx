@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowRight, Satellite, Sparkle } from 'lucide-react';
-import globeVideoSrc from '../../Earth_globe_rotating_in_space_202608201227.mp4';
+const globeVideoSrc = '/intro-globe.mp4';
 
 export default function Globe3DIntro({ onGetStarted }) {
   const [isZoomingIn, setIsZoomingIn] = useState(false);
