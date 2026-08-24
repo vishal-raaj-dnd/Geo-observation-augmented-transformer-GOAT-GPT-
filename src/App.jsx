@@ -265,7 +265,7 @@ export default function App() {
       setToolStepText('');
     };
 
-    const defaultTunnel = `https://cope-pee-maximize-neither.trycloudflare.com/api/predict`;
+    const defaultTunnel = `https://impacts-care-nick-participant.trycloudflare.com/api/predict`;
     const CLOUDFLARE_GPU_URL = (typeof window !== 'undefined' && localStorage.getItem('drishti_gpu_url')) || defaultTunnel;
 
     let isFinished = false;
