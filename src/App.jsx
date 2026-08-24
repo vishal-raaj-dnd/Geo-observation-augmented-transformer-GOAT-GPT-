@@ -265,7 +265,7 @@ export default function App() {
       setToolStepText('');
     };
 
-    const CLOUDFLARE_GPU_URL = `https://continental-adjustment-annotation-grid.trycloudflare.com/api/predict`;
+    const CLOUDFLARE_GPU_URL = `https://tracks-classic-kennedy-cornwall.trycloudflare.com/api/predict`;
 
     let isFinished = false;
     let fallbackTimer = null;
@@ -306,8 +306,12 @@ export default function App() {
           finalizeOnce({
             telemetry: {
               model_name: "Qwen2.5-VL-3B-Instruct (Nvidia T4 GPU)",
-              sensor: "Sentinel-2 L2A STAC"
+              sensor: "NASA MODIS / Sentinel-2 L2A",
+              ...(data.telemetry || {})
             },
+            ndwi_score: data.telemetry?.mean_ndwi,
+            water_area_km2: data.telemetry?.water_area_km2,
+            inundated_percentage: data.telemetry?.water_percentage,
             text: resultText
           }, resultText);
           return;
