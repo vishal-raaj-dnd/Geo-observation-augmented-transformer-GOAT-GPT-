@@ -320,8 +320,13 @@ export default function Map3DCanvas({
         id: layerId,
         type: 'raster',
         source: sourceId,
-        paint: { 'raster-opacity': opacity, 'raster-fade-duration': 150 }
+        paint: {
+          'raster-opacity': opacity,
+          'raster-fade-duration': 150,
+          'raster-resampling': 'linear'
+        }
       });
+      map.fitBounds([[w, s], [e, n]], { padding: 100, duration: 1400, maxZoom: 13.5 });
       overlaysRef.current.set(id, { sourceId, layerId, title: title || id, opacity });
       setActiveOverlays(Array.from(overlaysRef.current.entries()).map(([oid, o]) => ({ id: oid, ...o })));
     } catch (err) {

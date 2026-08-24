@@ -14,6 +14,7 @@ import {
   getStoredMessages,
   saveStoredMessage
 } from './services/storage';
+import ConnectionStatusBadge from './components/common/ConnectionStatusBadge';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'];
@@ -51,6 +52,9 @@ export default function App() {
   const [attachedImage, setAttachedImage] = useState(null);
   const [isToolLoading, setIsToolLoading] = useState(false);
   const [toolStepText, setToolStepText] = useState('');
+
+  const defaultTunnel = `https://impacts-care-nick-participant.trycloudflare.com/api/predict`;
+  const [gpuUrl, setGpuUrl] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('drishti_gpu_url')) || defaultTunnel);
 
   /* ---- Chat → Map command bridge ---- */
   const cmdSeqRef = useRef(0);
@@ -483,8 +487,13 @@ export default function App() {
             </div>
           </div>
 
-          {/* Right: Imagery rail toggle */}
+          {/* Right: Status badge & Imagery rail toggle */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, pointerEvents: 'auto' }}>
+            <ConnectionStatusBadge
+              activeTunnelUrl={gpuUrl}
+              onUpdateTunnelUrl={(newUrl) => setGpuUrl(newUrl)}
+            />
+
             <button
               onClick={() => setIsRailOpen(o => !o)}
               title={isRailOpen ? 'Hide imagery panel' : 'Show imagery panel'}
