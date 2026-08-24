@@ -265,7 +265,8 @@ export default function App() {
       setToolStepText('');
     };
 
-    const CLOUDFLARE_GPU_URL = `https://tracks-classic-kennedy-cornwall.trycloudflare.com/api/predict`;
+    const defaultTunnel = `https://cope-pee-maximize-neither.trycloudflare.com/api/predict`;
+    const CLOUDFLARE_GPU_URL = (typeof window !== 'undefined' && localStorage.getItem('drishti_gpu_url')) || defaultTunnel;
 
     let isFinished = false;
     let fallbackTimer = null;
