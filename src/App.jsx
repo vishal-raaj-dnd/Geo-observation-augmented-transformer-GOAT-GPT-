@@ -327,6 +327,27 @@ export default function App() {
             { name: "Unsubmerged Dry Land", value: 100, fill: "#22c55e" }
           ];
 
+          const backendFrame = data.image_url ? {
+            id: `backend-flood-heatmap-${Date.now()}`,
+            name: `Live Processed NDWI Heatmap — ${activeCity}`,
+            title: `Live Processed NDWI Heatmap — ${activeCity}`,
+            date: new Date().toLocaleDateString('en-GB'),
+            cloud_cover: '0.0%',
+            sensor: 'GOAT GPT Backend / SDL Inundation Raster',
+            url: data.image_url,
+            bbox: data.bbox || cityBbox
+          } : null;
+
+          if (backendFrame) {
+            // Auto-overlay processed flood heatmap directly onto 3D Globe!
+            dispatchMapCommand('overlayImage', {
+              id: backendFrame.id,
+              url: backendFrame.url,
+              bounds: backendFrame.bbox,
+              title: backendFrame.title
+            });
+          }
+
           finalizeOnce({
             telemetry: {
               model_name: "Qwen2.5-VL-3B-Instruct (Nvidia T4 GPU)",
@@ -352,6 +373,7 @@ export default function App() {
             donutChartData: lulcData,
             hydrograph: hydrographData,
             lulc_breakdown: lulcData,
+            frames: backendFrame ? [backendFrame] : [],
             demographic_exposure: {
               residents_exposed: Math.round(wp * 1250),
               risk_level: wp > 15 ? "CRITICAL SUBMERGENCE" : (wp > 5 ? "WARNING INUNDATION" : "SAFE DRY BASIN")
