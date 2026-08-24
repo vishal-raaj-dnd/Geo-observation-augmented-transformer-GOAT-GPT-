@@ -53,7 +53,7 @@ export default function App() {
   const [isToolLoading, setIsToolLoading] = useState(false);
   const [toolStepText, setToolStepText] = useState('');
 
-  const defaultTunnel = `https://philips-antivirus-excited-jill.trycloudflare.com/api/predict`;
+  const defaultTunnel = `https://chester-conditions-heard-she.trycloudflare.com/api/predict`;
   const [gpuUrl, setGpuUrl] = useState(() => (typeof window !== 'undefined' && localStorage.getItem('drishti_gpu_url')) || defaultTunnel);
 
   /* ---- Chat → Map command bridge ---- */
