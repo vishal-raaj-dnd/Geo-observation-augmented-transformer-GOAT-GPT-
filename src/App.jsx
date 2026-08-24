@@ -265,11 +265,9 @@ export default function App() {
       setToolStepText('');
     };
 
-    const LOCAL_BACKEND = `http://localhost:8000/api/chat/stream?query=${encodeURIComponent(textToSend)}&city=${encodeURIComponent(activeCity)}&state=${encodeURIComponent(activeState)}&month=${encodeURIComponent(dateTime.split(' ')[0] || 'August')}&year=${encodeURIComponent(dateTime.split(' ')[1] || '2026')}`;
-    const HF_SPACE_URL = `https://dinesh-07-dev-goat-gpt-backend.hf.space/api/predict`;
+    const CLOUDFLARE_GPU_URL = `https://locate-deeper-attorney-such.trycloudflare.com/api/predict`;
 
     let isFinished = false;
-    let hasReceivedMessage = false;
     let fallbackTimer = null;
 
     const finalizeOnce = (deliverables, fullText) => {
@@ -285,65 +283,29 @@ export default function App() {
       stopLoading();
     };
 
-    // Fast-path: Check if local SSE server is responsive within 1000ms; if not, query HF GPU / backend instantly
-    fallbackTimer = setTimeout(() => {
-      if (!isFinished && !hasReceivedMessage) {
-        callHuggingFaceGPU();
-      }
-    }, 1200);
+    // Query live Kaggle Cloudflare GPU Tunnel directly!
+    callCloudflareGPU();
 
-    try {
-      const eventSource = new EventSource(LOCAL_BACKEND);
-
-      eventSource.onmessage = (event) => {
-        hasReceivedMessage = true;
-        if (fallbackTimer) clearTimeout(fallbackTimer);
-        try {
-          const data = JSON.parse(event.data);
-          if (data.type === 'progress') {
-            setToolStepText(`[${data.percent}%] ${data.message}`);
-          } else if (data.type === 'text_chunk') {
-            appendDelta(data.text);
-          } else if (data.type === 'done') {
-            eventSource.close();
-            finalizeOnce(data.deliverables, data.deliverables?.text || '');
-          }
-        } catch (err) {}
-      };
-
-      eventSource.onerror = () => {
-        eventSource.close();
-        if (!isFinished && !hasReceivedMessage) {
-          callHuggingFaceGPU();
-        }
-      };
-    } catch (err) {
-      if (!isFinished) {
-        callHuggingFaceGPU();
-      }
-    }
-
-    async function callHuggingFaceGPU() {
+    async function callCloudflareGPU() {
       if (isFinished) return;
       try {
-        setToolStepText(`Connecting to Hugging Face GPU Space (dinesh-07-dev/goat-gpt-backend)...`);
-        const resp = await fetch(HF_SPACE_URL, {
+        setToolStepText(`Connecting to live Nvidia T4 GPU (Qwen2.5-VL + EO-Adapter)...`);
+        const resp = await fetch(CLOUDFLARE_GPU_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: [null, textToSend, "flood"] })
+          body: JSON.stringify({
+            prompt: `Analyze Sentinel-2 multi-spectral composite over ${activeCity}, ${activeState}. Detect submerged sectors, compute McFeeters NDWI water index score, and estimate agricultural crop loss.`,
+            city: activeCity,
+            state: activeState
+          })
         });
         if (resp.ok) {
           const data = await resp.json();
-          let resultText = "Model inference complete.";
-          if (typeof data.data?.[1] === 'string') resultText = data.data[1];
-          else if (typeof data.data?.[0] === 'string') resultText = data.data[0];
-          else if (data.data?.[1]?.text) resultText = data.data[1].text;
-          else if (typeof data.data?.[1] === 'object') resultText = JSON.stringify(data.data[1], null, 2);
-
+          let resultText = data.text || "Model inference complete.";
           appendDelta(resultText);
           finalizeOnce({
             telemetry: {
-              model_name: "Qwen2.5-VL-3B-Instruct (ZeroGPU)",
+              model_name: "Qwen2.5-VL-3B-Instruct (Nvidia T4 GPU)",
               sensor: "Sentinel-2 L2A STAC"
             },
             text: resultText
@@ -351,11 +313,11 @@ export default function App() {
           return;
         }
       } catch (err) {
-        console.warn("HF Space call error:", err);
+        console.warn("GPU tunnel call error:", err);
       }
 
-      // If both local and HF GPU are offline, inform user authentically
-      const offlineMsg = `### System Status: Remote GPU Model Connection\n\nUnable to establish connection with Hugging Face ZeroGPU endpoint (\`dinesh-07-dev/goat-gpt-backend\`) and local backend on port 8000.\n\nPlease verify that your Hugging Face Space is active or the local backend is started (\`python -m backend.app.main\`).`;
+      // If offline, inform user authentically
+      const offlineMsg = `### System Status: GPU Model Server Connection\n\nUnable to reach live GPU endpoint at \`${CLOUDFLARE_GPU_URL}\`.\n\nPlease verify your Kaggle GPU notebook is active.`;
       appendDelta(offlineMsg);
       finalizeOnce({ text: offlineMsg }, offlineMsg);
     }
