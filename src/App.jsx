@@ -265,7 +265,7 @@ export default function App() {
       setToolStepText('');
     };
 
-    const CLOUDFLARE_GPU_URL = `https://locate-deeper-attorney-such.trycloudflare.com/api/predict`;
+    const CLOUDFLARE_GPU_URL = `https://continental-adjustment-annotation-grid.trycloudflare.com/api/predict`;
 
     let isFinished = false;
     let fallbackTimer = null;
