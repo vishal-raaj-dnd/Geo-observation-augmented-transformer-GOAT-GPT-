@@ -79,9 +79,9 @@ async function computeRealNdwi(bbox, cityLabel, dateStr) {
     collections: ['sentinel-2-c1-l2a', 'sentinel-2-l2a'],
     bbox: [west, south, east, north],
     datetime,
-    limit: 15,
+    limit: 20,
     sortby: [{ field: 'properties.datetime', direction: 'desc' }],
-    query: { 'eo:cloud_cover': { lt: 25 } }
+    query: { 'eo:cloud_cover': { lt: 80 } }
   };
 
   let scene = null;
